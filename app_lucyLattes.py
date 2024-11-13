@@ -39,7 +39,7 @@ lab_yi = tk.Label(root,
                   anchor='w')
 lab_yi.grid(row=9, column=0)
 var_yi = tk.IntVar()
-var_yi.set(2010)
+var_yi.set(2021)
 e_yi = tk.Entry(root, textvariable=var_yi)
 e_yi.grid(row=9, column=1, sticky="W")
 
@@ -47,7 +47,7 @@ e_yi.grid(row=9, column=1, sticky="W")
 lab_yf = tk.Label(root, text='Digite ano Final para tabulacao de dados:')
 lab_yf.grid(row=10, column=0)
 var_yf = tk.IntVar()
-var_yf.set(2020)
+var_yf.set(2024)
 e_yf = tk.Entry(root, textvariable=var_yf)
 e_yf.grid(row=10, column=1, sticky='W')
 
@@ -65,7 +65,7 @@ lab_pg = tk.Label(root,
                   text='Digite o Nome do PG: ')
 lab_pg.grid(row=13, column=0)
 var_pg = tk.StringVar()
-var_pg.set('Ambiente e Sistemas de Produção Agrícola')
+var_pg.set('Programa de Pós Graduação em Engenharia Elétrica - UFMG')
 e_pg = tk.Entry(root, textvariable=var_pg, width=50)
 e_pg.grid(row=13, column=1, sticky="W")
 

@@ -153,3 +153,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# ppgee LucyLattes
+csv_producao/
+relatorio/
+relatorio/figures/
