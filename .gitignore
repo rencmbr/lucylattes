@@ -158,3 +158,4 @@ cython_debug/
 csv_producao/
 relatorio/
 relatorio/figures/
+relatorio/*.html
