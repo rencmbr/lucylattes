@@ -44,7 +44,7 @@ Para saber mais sobre *ambiente virtual* em `Python`, clique aqui [https://docs.
 
 De forma resumida, sugiro a seguinte instalação do ambiente virtual:
 
-1. Crie uma pasta (diretório) na pasta de instalação do PPGEE-Lucy com o nome .venv. Crie o ambiente virtual:
+1. Crie uma pasta (diretório) na pasta de instalação do PPGEE-Lucy com o nome .venv . Crie o ambiente virtual:
 
 ```
  mkdir .venv
@@ -72,15 +72,21 @@ note que (.venv) no início do "prompt" de comando desapareceu, indicando que o 
 **Pacotes Python**
 
 Para instalar os pacotes python necessários, acesse o **Terminal**, ative o ambiente virtual e instale os pacotes que estão listados no arquivo `requirements_lucyLattes.txt`. Para isso, use o `pip`, executando o comando
-`pip install -r requirements_lucyLattes,txt`
+
+```
+pip install -r requirements_lucyLattes.txt
+```
+
 o que instalará os pacotes necessários no ambiente virtual. 
 ## Como executar o programa
 
 Pelo terminal, com o **ambiente virtual ATIVADO**, acesse o diretório onde o PPGEE-Lucy foi instalado e digite:
 
-`python3 app_ppgeelucy.py`
+```
+python3 app_ppgeelucy.py
+```
 
-Se a instalação estiver correta, o programa iniciará sua execução e, ao seu final, gravará os dados de saída do PPGEE no diretório `ppgee_data` O relatório gerado pelo `lucylattes` original estará no diretório `relatório`.
+Se a instalação estiver correta, o programa iniciará sua execução e, ao seu final, gravará os dados de saída do PPGEE no diretório `ppgee_out` O relatório gerado pelo `lucylattes` original estará no diretório `relatorio`.
 
 ## Configurações:
 
@@ -92,19 +98,23 @@ Se a instalação estiver correta, o programa iniciará sua execução e, ao seu
 - apagar csv_producao:0
 - calcular indcapes:0
 - calcular hwebsci:0
-Onde ano inicial e ano final são os anos do período para o qual o relatório será gerado; 
-qualis é o arquivo que será usado para a classificação Qualis dos artigos publicados (os arquivos de classificação estão na pasta jcr_qualis). Uma observação é que para as Engenharias IV o arquivo a ser usado atualmente é o qualis_todasareas_periodicos_2020.csv;
-pg é o nome do programa de pós graduação em análise;
-apagar_csv_producao indica, caso igual a 1, que os arquivos .csv gerados durante a execução do programa devem ser apagados ao final da execução (tenho sempre mantido ele igual a 0 (zero));
-calcular indcapes indica, caso igual a 1, que os indicadores da capes devem ser calculados. Na realidade, esses indicadores ainda estão em fase de testes, não são calculados pelo lucylattes;
-calcular hwebsci indica, caso igual a 1, que o "índice h" deve ser calculado.
-2. As configurações para o PPGEE-Lucy estão no arquivo config_ppgee.txt. Assim como no caso anterior, as linhas do arquivo devem ser mantidas na ordem em que se encontram e são as seguintes: 
-- run_html_report: 0
+
+- Onde ano inicial e ano final são os anos do período para o qual o relatório será gerado; 
+- qualis é o arquivo que será usado para a classificação Qualis dos artigos publicados (os arquivos de classificação estão na pasta jcr_qualis). Uma observação é que para as Engenharias IV o arquivo a ser usado atualmente é o qualis_todasareas_periodicos_2020.csv;
+- pg é o nome do programa de pós graduação em análise;
+- apagar_csv_producao indica, caso igual a 1, que os arquivos .csv gerados durante a execução do programa devem ser apagados ao final da execução (tenho sempre mantido ele igual a 0 (zero));
+- calcular indcapes indica, caso igual a 1, que os indicadores da capes devem ser calculados. Na realidade, esses indicadores ainda estão em fase de testes, não são calculados pelo lucylattes;
+- calcular hwebsci indica, caso igual a 1, que o "índice h" deve ser calculado.
+
+2. As configurações para o PPGEE-Lucy estão no arquivo config_ppgee.txt. Assim como no caso anterior, as linhas do arquivo devem ser mantidas na ordem em que se encontram e são as seguintes:
+
+- run_html_report: 1
 - run_authors_classification: 1
 - authors_classification_year: 2020
+
 Onde run_html_report indica, caso igual a 1, que o relatório html original do script lucylattes deve ser gerado;
 run_authors_classification indica, caso igual a 1, que a classificação dos autores de artigos (se docentes, discentes, egressos) deve ser gerada;
-authors_classification_year é o ano que deve ser usado para a classificação dos autores de artigos. A classificação dos autores depende do ano (um discente neste ano pode se transformar em um egresso no ano seguinte, por exemplo).
+authors_classification_year é o ano que deve ser usado para a classificação dos autores de artigos. Isto é necessário porque classificação dos autores depende do ano (um discente neste ano pode se transformar em um egresso no ano seguinte, por exemplo).
 
 ## Arquivos de dados:
 
@@ -119,12 +129,12 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados que d
 
 - Os arquivos no diretório csv_producao podem ser usados diretamente para análise da produção do programa;
 - Os arquivos no diretório relatorio contêm uma síntese da produção do programa. Abra o arquivo relatorio_producao.html com um navegador para visualizar;
-- Os arquivos artigosclassificados-PPGEE-ano.csv e eventosclassificados-PPGEE-ano.csv, no diretório ppgee_data contêm a classificação (se docentes, discentes ou egressos) dos autores dos artigos em periódicos ou em eventos publicados no ano específico.
+- Os arquivos artigosclassificados-PPGEE-ano.csv e eventosclassificados-PPGEE-ano.csv, no diretório ppgee_out, contêm a classificação (se docentes, discentes ou egressos) dos autores dos artigos em periódicos ou em eventos publicados no ano específico.
 
 ## Observações:
 
-- No PPGEE-Lucy ainda há a possibilidade de rodar o `lucylattes` original. Basta executar, com o python3, o aplicativo app_lucy-Lattes,py ao invés do app_ppgeelucy.py. Maiores detalhes, ver a documentação no site original do `lucylattes` - https://github.com/rafatieppo/lucylattes ;
-- Os arquivos do PPGEE-Lucy estão bem separados dos arquivos do `lucylattes` original. Código de funções no diretório ppgee_resources (os do `lucylattes`estão no diretório resources) e arquivos de dados e saída de resultados no diretório ppgee_data. Os arquivos app_ppgeelucy.py e ppgeelucy.py, presentes no diretório de instalação do PPGEE-Lucy, não interferem nos arquivos originais do `lucylattes`também presentes neste diretório (app_lucyLattes.py, lucyLattes.py)
+- No PPGEE-Lucy ainda há a possibilidade de rodar o `lucylattes` original. Basta executar, com o python3, o aplicativo app_lucy-Lattes,py ao invés do app_ppgeelucy.py. Maiores detalhes sobre o app_lucylattes, ver a documentação no site original do `lucylattes` - https://github.com/rafatieppo/lucylattes ;
+- Os arquivos do PPGEE-Lucy estão bem separados dos arquivos do `lucylattes` original. Código de funções no diretório ppgee_resources (os do `lucylattes`estão no diretório resources) e arquivos de dados e saída de resultados nos diretórios ppgee_data e ppgee_out. Os arquivos app_ppgeelucy.py e ppgeelucy.py, presentes no diretório de instalação do PPGEE-Lucy, não interferem nos arquivos originais do `lucylattes`também presentes neste diretório (app_lucyLattes.py, lucyLattes.py)
 
 ## A fazer:
 
