@@ -86,7 +86,7 @@ Pelo terminal, com o **ambiente virtual ATIVADO**, acesse o diretório onde o PP
 python3 app_ppgeelucy.py
 ```
 
-Se a instalação estiver correta, o programa iniciará sua execução e, ao seu final, gravará os dados de saída do PPGEE no diretório `ppgee_data` O relatório gerado pelo `lucylattes` original estará no diretório `relatório`.
+Se a instalação estiver correta, o programa iniciará sua execução e, ao seu final, gravará os dados de saída do PPGEE no diretório `ppgee_out` O relatório gerado pelo `lucylattes` original estará no diretório `relatorio`.
 
 ## Configurações:
 
