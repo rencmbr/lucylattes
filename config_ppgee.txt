@@ -1,4 +1,4 @@
-run_html_report: 0
+run_html_report: 1
 run_authors_classification: 1
 authors_classification_year: 2020
 

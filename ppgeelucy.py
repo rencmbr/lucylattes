@@ -64,9 +64,6 @@ def run_ppgeeLucy():
     turn_authors_classification = configsPPGEE.run_authors_classification()
     authors_classification_year = configsPPGEE.classification_year()
     
-    if turn_authors_classification == 1:
-        authors_classification(authors_classification_year)
-
     if turn_hwebsci_index == 1:
         resources.getindex_hwebsci()
     else:
@@ -84,6 +81,10 @@ def run_ppgeeLucy():
         # capes_distindproddp()
     else:
         print("Indicadores capes para PPG nao foram gerados.")
+
+    if turn_authors_classification == 1:
+        authors_classification(authors_classification_year)
+    
 
     if turn_rm_csvfiles == 1:
         resources.remove_csv_producao()

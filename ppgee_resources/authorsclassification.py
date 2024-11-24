@@ -42,7 +42,7 @@ def regulariza_autores(autores):
                     flag_nome = True
                 if not flag_nome:
                     sobrenome = nomes[len(nomes)-1]
-                    prenome = nomes[0] #[0]
+                    prenome = nomes[0] 
             Prenome.append(prenome)
             Sobrenome.append(sobrenome)
         tabela_sobrenomes.append(Sobrenome)
@@ -55,11 +55,7 @@ def regulariza_nomes(lista_nomes):
     for i in range(len(lista_nomes)):
         nomes = lista_nomes[i].split(' ')
         sobrenome = nomes[len(nomes)-1]
-        # if sobrenome == 'FILHO':
-        #     sobrenome = nomes[len(nomes)-2]
-        # if sobrenome == 'JUNIOR':
-        #     sobrenome = nomes[len(nomes)-2]    
-        prenome = nomes[0] #[0]
+        prenome = nomes[0] 
         Prenome.append(prenome)
         Sobrenome.append(sobrenome)
     return [Prenome,Sobrenome]
@@ -174,9 +170,9 @@ def tabela_artigos(year) :
     # Gera tabelas de artigos em periodicos para o ano 
     # em análise
     # ===================================================
-    # Le os dados que serão usados (todos os artigos)
+    # Le os dados que serão usados (todos os artigos, já removidos os duplicados)
     usecols = ["TITLE","YEAR","DOI", "JOURNAL","ISSN","AUTHOR","QUALIS"]
-    df = pd.read_csv('./csv_producao/papers_all.csv', usecols=usecols,
+    df = pd.read_csv('./csv_producao/papers_uniq.csv', usecols=usecols,
                         header=0, dtype=str)
 
     # Filtra os artigos do ano específico 
@@ -187,13 +183,6 @@ def tabela_artigos(year) :
 
     df["AUTHOR"] = df["AUTHOR"].apply(regulariza)
     df["AUTHOR"] = df["AUTHOR"].apply(eval)
-
-    # ARTIGO_TITULO   = df["TITLE"].to_list()
-    # ARTIGO_ANO      = df["YEAR"].to_list()
-    # ARTIGO_DOI      = df["DOI"].to_list()
-    # ARTIGO_VEICULO  = df["JOURNAL"].to_list()
-    # ARTIGO_AUTORES  = df["AUTHOR"].to_list()
-    # ARTIGO_QUALIS   = df["QUALIS"].to_list()
 
     return df
        
@@ -202,9 +191,9 @@ def tabela_eventos(year):
     # Gera tabelas de producoes em eventos para o ano 
     # em análise
     # ===================================================
-    # Le os dados que serão usados (todas as produções)
+    # Le os dados que serão usados (todas as produções, já removidas as duplicatas)
     usecols = ["TITLE","YEAR","AUTHOR"]
-    df = pd.read_csv('./csv_producao/worksevents_all.csv', usecols=usecols,
+    df = pd.read_csv('./csv_producao/worksevents_uniq.csv', usecols=usecols,
                         header=0, dtype=str)
     # Filtra os artigos do ano específico 
  
@@ -214,17 +203,6 @@ def tabela_eventos(year):
 
     df["AUTHOR"] = df["AUTHOR"].apply(regulariza)
     df["AUTHOR"] = df["AUTHOR"].apply(eval)
- 
-    # ARTIGO_TITULO   = df["TITLE"].to_list()
-    # ARTIGO_ANO      = df["YEAR"].to_list()
-    # ARTIGO_DOI      = df["DOI"].to_list()
-    # ARTIGO_VEICULO  = df["JOURNAL"].to_list()
-    # ARTIGO_AUTORES  = df["AUTHOR"].to_list()
-    # ARTIGO_QUALIS   = df["QUALIS"].to_list()
-    # EVENTO_TITULO = []
-    # EVENTO_ANO = []
-    # EVENTO_NOME = []
-    # EVENTO_AUTORES = []
 
     return df
 
@@ -367,6 +345,8 @@ def authors_classification(year):
     # TODO: o nome do arquivo poderia ser configurado via arquivo de configuração
     file_saida_artigos = 'ppgee_data/artigosclassificados-PPGEE-' + year + '.csv'
     artigos_com_autores_classificados.to_csv(file_saida_artigos)
+    print('- O arquivo com a classificação dos autores de artigos foi gerado em ', file_saida_artigos)
 
     file_saida_eventos = 'ppgee_data/eventosclassificados-PPGEE-' + year + '.csv'
     eventos_com_autores_classificados.to_csv(file_saida_eventos)
+    print('- O arquivo com a classificação dos autores de publicações em eventos foi gerado em ', file_saida_eventos)
