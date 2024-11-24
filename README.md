@@ -134,7 +134,7 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados que d
 ## Observações:
 
 - No PPGEE-Lucy ainda há a possibilidade de rodar o `lucylattes` original. Basta executar, com o python3, o aplicativo app_lucy-Lattes,py ao invés do app_ppgeelucy.py. Maiores detalhes sobre o app_lucylattes, ver a documentação no site original do `lucylattes` - https://github.com/rafatieppo/lucylattes ;
-- Os arquivos do PPGEE-Lucy estão bem separados dos arquivos do `lucylattes` original. Código de funções no diretório ppgee_resources (os do `lucylattes`estão no diretório resources) e arquivos de dados e saída de resultados no diretório ppgee_data. Os arquivos app_ppgeelucy.py e ppgeelucy.py, presentes no diretório de instalação do PPGEE-Lucy, não interferem nos arquivos originais do `lucylattes`também presentes neste diretório (app_lucyLattes.py, lucyLattes.py)
+- Os arquivos do PPGEE-Lucy estão bem separados dos arquivos do `lucylattes` original. Código de funções no diretório ppgee_resources (os do `lucylattes`estão no diretório resources) e arquivos de dados e saída de resultados nos diretórios ppgee_data e ppgee_out. Os arquivos app_ppgeelucy.py e ppgeelucy.py, presentes no diretório de instalação do PPGEE-Lucy, não interferem nos arquivos originais do `lucylattes`também presentes neste diretório (app_lucyLattes.py, lucyLattes.py)
 
 ## A fazer:
 
