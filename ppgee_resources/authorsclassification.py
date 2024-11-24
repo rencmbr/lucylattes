@@ -343,10 +343,10 @@ def authors_classification(year):
     # Gera os artigos (.csv) com os dados dos artigos e classificação dos autores
 
     # TODO: o nome do arquivo poderia ser configurado via arquivo de configuração
-    file_saida_artigos = 'ppgee_data/artigosclassificados-PPGEE-' + year + '.csv'
+    file_saida_artigos = 'ppgee_out/artigosclassificados-PPGEE-' + year + '.csv'
     artigos_com_autores_classificados.to_csv(file_saida_artigos)
     print('- O arquivo com a classificação dos autores de artigos foi gerado em ', file_saida_artigos)
 
-    file_saida_eventos = 'ppgee_data/eventosclassificados-PPGEE-' + year + '.csv'
+    file_saida_eventos = 'ppgee_out/eventosclassificados-PPGEE-' + year + '.csv'
     eventos_com_autores_classificados.to_csv(file_saida_eventos)
     print('- O arquivo com a classificação dos autores de publicações em eventos foi gerado em ', file_saida_eventos)
