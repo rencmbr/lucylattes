@@ -341,12 +341,13 @@ def authors_classification(year):
     eventos_com_autores_classificados = insere_classificacao_autores(eventos,TIPO_AUTOR_EVENTO)
 
     # Gera os artigos (.csv) com os dados dos artigos e classificação dos autores
-
-    # TODO: o nome do arquivo poderia ser configurado via arquivo de configuração
+    
+    columns = ["TITLE","YEAR","DOI", "JOURNAL","ISSN","QUALIS","CLASSIFIED_AUTHORS"]
     file_saida_artigos = 'ppgee_out/artigosclassificados-PPGEE-' + year + '.csv'
-    artigos_com_autores_classificados.to_csv(file_saida_artigos)
+    artigos_com_autores_classificados.to_csv(file_saida_artigos, columns=columns)
     print('- O arquivo com a classificação dos autores de artigos foi gerado em ', file_saida_artigos)
 
+    columns = ["TITLE","YEAR","CLASSIFIED_AUTHORS"]
     file_saida_eventos = 'ppgee_out/eventosclassificados-PPGEE-' + year + '.csv'
-    eventos_com_autores_classificados.to_csv(file_saida_eventos)
+    eventos_com_autores_classificados.to_csv(file_saida_eventos, columns=columns)
     print('- O arquivo com a classificação dos autores de publicações em eventos foi gerado em ', file_saida_eventos)
