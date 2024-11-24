@@ -44,7 +44,7 @@ Para saber mais sobre *ambiente virtual* em `Python`, clique aqui [https://docs.
 
 De forma resumida, sugiro a seguinte instalação do ambiente virtual:
 
-1. Crie uma pasta (diretório) na pasta de instalação do PPGEE-Lucy com o nome .venv. Crie o ambiente virtual:
+1. Crie uma pasta (diretório) na pasta de instalação do PPGEE-Lucy com o nome .venv . Crie o ambiente virtual:
 
 ```
  mkdir .venv
@@ -99,12 +99,12 @@ Se a instalação estiver correta, o programa iniciará sua execução e, ao seu
 - calcular indcapes:0
 - calcular hwebsci:0
 
-Onde ano inicial e ano final são os anos do período para o qual o relatório será gerado; 
-qualis é o arquivo que será usado para a classificação Qualis dos artigos publicados (os arquivos de classificação estão na pasta jcr_qualis). Uma observação é que para as Engenharias IV o arquivo a ser usado atualmente é o qualis_todasareas_periodicos_2020.csv;
-pg é o nome do programa de pós graduação em análise;
-apagar_csv_producao indica, caso igual a 1, que os arquivos .csv gerados durante a execução do programa devem ser apagados ao final da execução (tenho sempre mantido ele igual a 0 (zero));
-calcular indcapes indica, caso igual a 1, que os indicadores da capes devem ser calculados. Na realidade, esses indicadores ainda estão em fase de testes, não são calculados pelo lucylattes;
-calcular hwebsci indica, caso igual a 1, que o "índice h" deve ser calculado.
+- Onde ano inicial e ano final são os anos do período para o qual o relatório será gerado; 
+- qualis é o arquivo que será usado para a classificação Qualis dos artigos publicados (os arquivos de classificação estão na pasta jcr_qualis). Uma observação é que para as Engenharias IV o arquivo a ser usado atualmente é o qualis_todasareas_periodicos_2020.csv;
+- pg é o nome do programa de pós graduação em análise;
+- apagar_csv_producao indica, caso igual a 1, que os arquivos .csv gerados durante a execução do programa devem ser apagados ao final da execução (tenho sempre mantido ele igual a 0 (zero));
+- calcular indcapes indica, caso igual a 1, que os indicadores da capes devem ser calculados. Na realidade, esses indicadores ainda estão em fase de testes, não são calculados pelo lucylattes;
+- calcular hwebsci indica, caso igual a 1, que o "índice h" deve ser calculado.
 
 2. As configurações para o PPGEE-Lucy estão no arquivo config_ppgee.txt. Assim como no caso anterior, as linhas do arquivo devem ser mantidas na ordem em que se encontram e são as seguintes:
 
@@ -129,7 +129,7 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados que d
 
 - Os arquivos no diretório csv_producao podem ser usados diretamente para análise da produção do programa;
 - Os arquivos no diretório relatorio contêm uma síntese da produção do programa. Abra o arquivo relatorio_producao.html com um navegador para visualizar;
-- Os arquivos artigosclassificados-PPGEE-ano.csv e eventosclassificados-PPGEE-ano.csv, no diretório ppgee_data, contêm a classificação (se docentes, discentes ou egressos) dos autores dos artigos em periódicos ou em eventos publicados no ano específico.
+- Os arquivos artigosclassificados-PPGEE-ano.csv e eventosclassificados-PPGEE-ano.csv, no diretório ppgee_out, contêm a classificação (se docentes, discentes ou egressos) dos autores dos artigos em periódicos ou em eventos publicados no ano específico.
 
 ## Observações:
 
