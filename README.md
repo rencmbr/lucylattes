@@ -60,6 +60,7 @@ source .venv/bin/activate
 (.venv) renato@renato-mint:~/my-lucylattes/ppgeelucy$  
 ```
 (note o (.venv) no início do "prompt" de comando, indicando que o ambiente virtual está ativado.
+
 3. Para Desativar o ambiente virtual:
 
 ```
