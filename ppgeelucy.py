@@ -4,6 +4,8 @@ import re
 import pandas as pd
 import resources
 import time
+from ppgee_resources.authorsclassification import authors_classification
+from ppgee_resources.ppgee_read_set_config import PPGEEconfigSetup
 
 
 def run_ppgeeLucy():
@@ -57,13 +59,22 @@ def run_ppgeeLucy():
     resources.tidydata_productsppect()
     resources.grapho_paper()
 
+    configsPPGEE=PPGEEconfigSetup()
+    turn_html_report = configsPPGEE.run_html_report()
+    turn_authors_classification = configsPPGEE.run_authors_classification()
+    authors_classification_year = configsPPGEE.classification_year()
+    
+    if turn_authors_classification == 1:
+        authors_classification(authors_classification_year)
+
     if turn_hwebsci_index == 1:
         resources.getindex_hwebsci()
     else:
-        print('Indicadores Web of Scince nao foram gerados.')
+        print('Indicadores Web of Science nao foram gerados.')
 
-    resources.report_setup_json()
-    resources.report_write(qf)
+    if turn_html_report == 1:
+        resources.report_setup_json() 
+        resources.report_write(qf)
 
     if turn_capes_index == 1:
         print('Indicadores capes estao em fase de testes, nao gerados.')

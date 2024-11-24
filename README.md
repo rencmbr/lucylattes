@@ -1,50 +1,33 @@
-# lucyLattes
+# PPGEE-lucy
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2591748.svg)](https://doi.org/10.5281/zenodo.2591748)
+## Motivação:
 
-## Última atualização
+O PPGEE-Lucy é um fork do `lucyLattes`[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2591748.svg)](https://doi.org/10.5281/zenodo.2591748), O objetivo é adaptar o `lucylattes` às necessidades do Programa de Pós-Graduação em Engenharia Elétrica da UFMG (PPGEE-UFMG). Estamos desenvolvendo rotinas para:
 
-- Versão v1.0.2
-- *Wed 2024-08-14 20:56:51 -04* verifique os logs <a href="#logss">aqui</a>.
+- Classificação automática dos autores dos artigos gerados pela comunidade do PPGEE-UFMG em um determinado ano. Isto é importante para o preenchimento do relatório Sucupira, especialmente devido à necessidade de identificar se determinado autor é discente ou egresso do programa (PRONTO!);
+- Geração automática de indicadores de produtividade, compatíveis com os utilizados pela área de Engenharias IV da CAPES, com a finalidade de auxílio na avaliação do desempenho do programa;
+- Auxílio no processo de credenciamento/recredenciamento dos docentes do PPGEE-UFMG, gerando os indicadores utilizados;
+- Detecção de anomalias nos dados do PPGEE-UFMG
 
-## Motivação
+## O que faz:
 
-O CNPq por meio do currículo Lattes agrega dados do registro da vida profissional de estudantes, professores, e pesquisadores do país, e tornando-se padrão nacional no meio científico para consulta sobre a produção científica dos referidos profissionais.
+- Extração, compilação, e organização dos dados dos currículos da plataforma *Lattes* em planilhas, e geração de um relátório simplificado (funcionalidades herdadas do `lucyLattes`).
+- Geração de planilhas com os dados organizados para auxiliar na avaliação do programa, credenciamento de docentes e preenchimento correto do relatório Sucupira.
 
-Contudo, após a criação do captcha para o acesso aos currículos Lattes, extrair dados dos currículos se tornou uma tarefa árdua, pois todas vez que pretende-se acessar um currículo, torna-se necessário passar pelo captcha.  Com o intuito de auxiliar na obtenção destes dados, o `lucyLattes` foi desenvolvido.
-
-Com o intuito de melhorar a extração dos dados, e reduzir a possibilidade de erros de execução, a versão **v1.0.0** foi desenvolvida. As principais mudanças estão na lógica de extração dos dados, organização dos arquivos e novos relatórios. 
-
-## O que faz
-
-Extração, compilação, e organização dos dados dos currículos da plataforma *Lattes* em arquivos de texto, e geração de um relátório simplificado, que proporcionam agilidade para a geração de informação.
-
-Veja algumas informações geradas:
-
- <figure>
-  <img src="https://rafatieppo.github.io/post/pics/20190313_period_dep_year.png" alt=" ">
-  <figcaption>Publicações de periódicos por ano</figcaption>
-</figure> 
-
-## Notas
-
-> O lucyLattes não tem vínculo com o CNPq. Este programa computacional é fruto de um esforço (independente) realizado com o objetivo de dar suporte às rotinas de análise de dados cadastradas nos Currículos Lattes (publicamente disponíveis).
-
-> Este programa é um software livre; você pode redistribui-lo e/ou modificá-lo dentro dos termos da Licença Pública Geral GNU. **Verifique** o arquivo **LICENSE.txt** .
-
->Este programa é distribuído na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. **Verifique** o arquivo **LICENSE.txt** .
-
-## Como usar 
-
-Inicialmente recomenda-se a leitura dos próximos tópicos (*Instalação* e *Como executar o programa*).
-
-## Requerimentos:
+## Requisitos:
   
-- Sistema operacional Linux ou com base Unix (preferencialmente), ou ainda Windows;
+- Sistema operacional Linux ou Windows;
 - Python 3.8 ou superior;
-- Navegador (Firefox ou Chromium) para visualizar relatório.
+- Navegador (Firefox ou Chromium) para visualizar o relatório.
 
 ## Instalação no Linux
+
+1. Faça o Download do PPGEE-Lucy. 
+Download aqui: [https://github.com/rencmbr/lucylattes/](https://github.com/rencmbr/lucylattes/). Vá na opção "Code". Se você trabalha com o git, escolha a opção "Clone". Se não for este o caso, escolha a opção `.zip` para fazer o download dos arquivos.
+
+2. Se a opção foi o .zip, descompacte o arquivo em um diretório de sua preferência. 
+
+3. Copie os *curriculos Lattes* desejados no diretório `xml_zip`. NÃO altere o nome e nem o formato dos arquivos baixados, e *NÃO DESCOMPACTE OS ARQUIVOS*. O nome do arquivo é composto por *16* caracteres e a extensão `.zip`, e.g. `3275865819287843.zip`. Dentro de cada arquivo .zip existirá um arquivo denominado curriculo.xml.
 
 **Python**
 
@@ -57,387 +40,109 @@ sudo apt-get install python3-tk
 ```
 **Ambiente virtual python** (virtual environments) no Linux
 
-Para saber mais sobre *ambiente virtual* em `Python`, clique aqui [https://docs.python.org/3/library/venv.html](https://docs.python.org/3/library/venv.html). Também fiz um post resumido sobre o assunto [AQUI](https://rafatieppo.github.io/post/2021_07_27_python_env/).
+Para saber mais sobre *ambiente virtual* em `Python`, clique aqui [https://docs.python.org/3/library/venv.html](https://docs.python.org/3/library/venv.html). O autor do `lucyLattes`, Rafael Tieppo, fez um post resumido sobre o assunto [AQUI](https://rafatieppo.github.io/post/2021_07_27_python_env/).
 
-- De modo simplista:
+De forma resumida, sugiro a seguinte instalação do ambiente virtual:
 
-1. Crie uma pasta (diretório) e o ambiente virtual:
+1. Crie uma pasta (diretório) na pasta de instalação do PPGEE-Lucy com o nome .venv. Crie o ambiente virtual:
 
 ```
- mkdir teste_venv
+ mkdir .venv
  
- python3 -m venv ./teste_venv
+ python3 -m venv .venv
  ```
 
 2. Para ativar o ambiente virtual:
 
 ```
-rt@rt-av52a:~/.virtualenvs$ source ./teste_venv/bin/activate
+source .venv/bin/activate
 
-(teste_venv) rafatieppo@rt-av52a:~/.virtualenvs$ 
+(.venv) renato@renato-mint:~/my-lucylattes/ppgeelucy$  
 ```
+(note o (.venv) no início do "prompt" de comando, indicando que o ambiente virtual está ativado.
+3. Para Desativar o ambiente virtual:
 
-3. Para DEsativar o ambiente virtual:
-
 ```
-(teste_venv) rafatieppo@rt-av52a:~/.virtualenvs$ deactivate
-rafatieppo@rt-av52a:~/.virtualenvs$
+(.venv) renato@renato-mint:~/my-lucylattes/ppgeelucy$ deactivate
+renato@renato-mint:~/my-lucylattes/ppgeelucy$ 
 ```
+note que (.venv) no início do "prompt" de comando desapareceu, indicando que o ambiente virtual foi desativado.
 
 **Pacotes Python**
 
-Para todos os sistemas operacionais (Linux, MacOS, Windows, Solaris, etc) são necesssários as mesmas bibliotecas. Para instalar as bibliotecas em ambientes Linux acesse o **Terminal**, ative o seu ambiente `Python` e instale os pacotes. 
-
-Posteriormente, com o **ambiente virtual ATIVADO**, instale os pacotes necessários. No arquivo `requirements_lucyLattes.txt` está listado os pacotes necessários. Com o `pip` é possível executar o comando `pip install -r requirements_lucyLattes,txt` , e possivelmente os pacotes serão instalados. Ou ainda, vc pode instalar um pacote por vez.
-
-```
-(teste_venv) rt@rt-av52a:~/.virtualenvs$ pip3 install numpy
-Collecting numpy
-  Cache entry deserialization failed, entry ignored
-  Downloading https://files.pythonhosted.org/packages/b8/46/40729c784/numpyx86_64.whl (14.1MB)
-    100% |████████████████████████████████| 14.1MB 128kB/s 
-Installing collected packages: numpy
-Successfully installed numpy-1.21.1
-(teste_venv) rafatieppo@rt-av52a:~/.virtualenvs$
-```
-
-## Instalação no Windows
-
-- Se não possuir *Python3* ou superior instalado no *Windows*
-
-Acesse [https://python.org.br/instalacao-windows/](https://python.org.br/instalacao-windows/) e instale a versão do `Python 3` (versão 3.8 ou superior), basta seguir as instruções. **Não esqueça de instalar o PIP**.
-
-Recomenda-se criar um ambiente virtual para instalar os pacotes e executar o `lucyLattes`.
-
-**Ambiente virtual python** (virtual environments) no Windows
-
-- De modo simplista:
-
-1. Acesse o *Power Shell* como **Administrador** (botão direito) e libere a execução de *Scripts*. Se quiser saber mais [Microsot](https://answers.microsoft.com/pt-br/windows/forum/all/permitir-a-execu%C3%A7%C3%A3o-de-scripts-no/f6b195cf-0be7-46e2-b88c-358c79f78343)
-
-No *Power Shell* digite:
-
-```
-Set-ExecutionPolicy Unrestricted
-```
-
-pressione `S` ou `Y`.
-
-2. Crie uma pasta (diretório) que neste exemplo é denominada `teste_venv`:
-
-```
-C:\Users\Joao\> mkdir teste_venv
-```
-
-3. Crie o ambiente virtual na pasta que foi criada:
-
-```
-C:\Users\Joao\> python3 -m venv ./teste_venv
-```
-
-4. Ative seu ambiente virtual.
-
-```
-C:\Users\Joao\> \teste_venv\Scripts\activate
-```
-
-Pronto, agora é só instalar as bibliotecas com o `pip` e posteriormente executar o `LucyLattes`.
-
-5. Para desativar o ambiente virtual.
-
-```
-(teste_venv) C:\Users\Joao\> deactivate
-C:\Users\Joao\>
-```
-
-**Pacotes Python**
-
-Para todos os sistemas operacionais (Linux, MacOS, Windows, Solaris, etc) são necesssários as mesmas bibliotecas. Para instalar as bibliotecas em ambientes Linux acesse o **Terminal**, ative o seu ambiente `Python` e instale os pacotes. 
-
-Posteriormente, com o **ambiente virtual ATIVADO**, instale os pacotes necessários. No arquivo `requirements_lucyLattes.txt` está listado os pacotes necessários. Com o `pip` é possível executar o comando `pip install -r requirements_lucyLattes,txt` , e possivelmente os pacotes serão instalados. Ou ainda, vc pode instalar um pacote por vez.
-
-```
-(teste_venv) C:\Users\Joao\>  pip install numpy
-Collecting numpy
-  Cache entry deserialization failed, entry ignored
-  Downloading https://files.pythonhosted.org/packages/b8/46/40729c784/numpyx86_64.whl (14.1MB)
-    100% |████████████████████████████████| 14.1MB 128kB/s 
-Installing collected packages: numpy
-Successfully installed numpy-1.21.1
-(teste_venv) C:\Users\Joao\>
-```
-
+Para instalar os pacotes python necessários, acesse o **Terminal**, ative o ambiente virtual e instale os pacotes que estão listados no arquivo `requirements_lucyLattes.txt`. Para isso, use o `pip`, executando o comando
+`pip install -r requirements_lucyLattes,txt`
+o que instalará os pacotes necessários no ambiente virtual. 
 ## Como executar o programa
 
-1. Faça o Download do arquivo `.zip` que contém o `lucyLattes`. 
-Download aqui: [https://rafatieppo.github.io/lucylattes/](https://rafatieppo.github.io/lucylattes/). Escolha a opção `.zip` ou `.tar` para fazer o download dos aquivos.
-
-2. Descompacte o arquivo `.zip` que em um diretório de sua preferência. 
-
-3. Faça o dowload dos *curriculos Lattes* desejados e copie todos no diretório `xml_zip`. Para realizar o download dos *currículos Lattes*, acesse o *currículo Lattes* do pesquisador, e no canto superior direito clique sobre um botão `XML`, salve o arquivo e NÃO altere o nome e nem o formato, e *NÃO DESCOMPACTE OS ARQUIVOS*. O nome do arquivo é composto por *16* caracteres e a extensão `.zip`, e.g. `3275865819287843.zip`. 
-
-4. Pelo terminal (ou power shell), e com o **ambiente virtual ATIVADO**, acesse o diretório descompactado, e digite:
-
-- Se for em ambiente `Linux`:
-
-`python3 app_lucyLattes.py`
-
-- Se for em ambiente `Windows`
-
-`python.exe app_lucyLattes.py` (ou algo similar)
-
-7. Se tudo ocorreu corretamente, uma `interface` aparecerá:
-
-<img src="./fig_gui.png" alt="" width="600">
-
-Agora selecione as opções disponíveis, clique em `Gravar configurações`, e execute (`Run lucyLattes`). Se tudo ocorreu normalmente, há um relatório disponível na pasta `./relatorio` . Abra o arquivo `relatorio_producao.html` com o *Firefox* ou com o navegador da sua preferência. 
-
-## Observações
-
-<strike>
-**Atenção**, **Atenção**, **Atenção**.
-</strike>
-
-## Gostou?
-
-<p>Espero que o <code>lucyLattes</code> seja útil de alguma forma, dentro do possível estarei melhorando o script na sua funcionalidade.</p>
-<p><img src="https://i.gifer.com/QLRN.gif" alt=""></p>
-
-- Nos de uma estrela clicando na estrela no topo da página (lado direito)
-- Caso queira, sinta-se livre para me pagar um cafézinho. Tudo que faço aqui é uma maneira de retribuir e compartilhar o conhecimento que adquiri ao longo da minha carreira, mas quem sou eu para negar um café, certo? Sua ajuda vai ser convertida para manter os scripts (pagando o provedor, por exemplo). O excedente, será utilizado para comprar café mesmo.
-
-- via Paypal
-
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=68LAA9FZLABUQ" > <img src="https://rafatieppo.github.io/post/pics/20190313_logo_rt_donate.png" alt="" border="0" width="150"/> </a>
-
-- via Pix
-
-<img src="./fig_pix_lucy.jpg" alt="">
-
-## Development
-
-- TODO DANGER create a exceptio for NO papers found for reseacher.
-- DONE read `zip` and return a `xml`;
-- DONE create a minidom from `.xml`;
-- DONE a function to return `.xml` encoding and version;
-- DONE get dados-gerais and create a `csv` file for each researcher;
-- DONE get research and extension projects with their respective participants, classification of the type of project (research or extension) by organizing the data into a `DataFrame` and export in a `csv` file for each researcher;
-- DONE get published papers in **journal** by organizing the data into a `DataFrame` and export in a `csv` file for each researcher;
-- DONE get published BOOKS organizing the data into a `DataFrame` and export in a `csv` file for each researcher;
-- DONE get published CHAPTERS organizing the data into a `DataFrame` and export in a `csv` file for each researcher;
-- DONE get advising for master, doc, pos-doc and others
-- DONE get teaching courses for each institution
-- DONE get short courses from others types of technical production
-- DONE assign qualis and jcr for each paper;
-
-- DONE Tidy data [100%]
-  - [X] create algorithm to drop Titles by means cosine similarity
-  - [X] tidy script data to join data from all researchers;
-  - [X] tidy script to drop NaN, delete broked registers, etc
-
-- TODO Running and config [100%]
-  - [X] conditional to run or not index-h `getindex_hwebsci()`
-  - [X] work on a GUI
-
-- TODO Grapho for interactions among researchers [80%]
-  - [X] interactions among researchers for papers;
-  - [X] researchers with out interaction are listed;
-  - [X] plot interaction
-  - [X] Calcular o peso das interações dos membros no grafo;
-  - [ ] Verificar as interações nos projetos de pesquisa e extensão;
-
-- TODO Gerar índices utilizados pela CAPES para avaliação de PPG [0%]
-  - [ ] Índice de Orientação (IndOri) 
-  - [ ] Índice de discentes autores (IndAut)
-  - [ ] Índice de produtos com autoria discente (IndDis)
-  - [ ] Índice de Produtividade referente a artigos científicos do Programa (IndProdArt) 
-  - [ ] Validação
-
-- DONE Analyze H-index from WOS
-
-- TODO Report `.html` [93%]
-  - [X] setup file (`report_setup.py`) to report.py;
-  - [X] list of researcher with city, state, linl lattes, update, orcid;
-  - [X] list of research and extension projects;
-  - [X] list of books and chapters;
-  - [X] summary (by year) of the papers, books, chapters for researchers group;
-  - [X] summary (by qualis) of the papers, books, chapters for researchers group;
-  - [X] plot (year and qualis) of the papers, books, chapters for researchers group;
-  - [X] summary of teaching, books, chapters by each researcher;
-  - [X] summary of finished advising
-  - [X] summary of running advising
-  - [X] summary of papers by year and qualis
-  - [X] summary for each researcher (papers, projects, advising)
-  - [X] summary WOS
-  - [X] improve the name files output for `hindex_websci_papers.csv` `hindex_websci_allgroup.csv` etc ... it is confuse.
-  - [X] create a `support_report.py` file to decrease number of lines and improve the quality, maybe I should work with Classes.
-  - [ ] create a function to fit yaxis in all plots
-
-- DONE Remove files
-  - `csv` files in folder `csv_producao`;
-  - `csv` files in folder `csv_report`;
-  
-## Files
-
-- `config.txt`: minimal configurations to run lucylattes, it is possible to assign period (year), qualis group, etc.
-- `lucyLattes.py`: run all;
-- `lucyLattes.py`: funciona como o executável;
-- `./resources/read_set_config.py`: is a class to assing configurations;
-- `./resources/getadv_minidom.py`: write a `.csv` with advising data from each `.xml`;
-- `./resources/getadvrunning_minidom.py`: write a `.csv` with running advising data from each `.xml`;
-- `./resources/getbooks_minidom.py`: write a `.csv` with books data from each `.xml`;
-- `./resources/getchapters_minidom.py`: write a `.csv` with chapters data from each `.xml`;
-- `./resources/getencoding_minidom.py`: return enconding and version from `.xml`;
-- `./resources/getgeneraldata_minidom.py`: write a `.csv` with dados-gerais from each `.xml`;
-- `./resources/getgeneraldata_grad_minidom.py`: write a `.csv` with formacao-academica graduacao from each `.xml`;
-- `./resources/getgeneraldata_mest_minidom.py`: with formacao-academica mestrado from each `.xml`; 
-- `./resources/getgeneraldata_dout_minidom.py`: with formacao-academica doutorado from each `.xml`;
-- `./resources/getminidom_xmlfile`.py: return a minidom from each `.xml`;
-- `./resources/getpapers_minidom.py`:  write a `.csv` with papers data from each `.xml`;
-- `./resources/getresearchextproj_minidom`.py: write a `.csv` with research and extension projects from each `.xml`;
-- `./resources/getshortcourses_minidom`.py: write a `.csv` with short courses from each `.xml`;
-- `./resources/getteaching_minidom.py`: write a `.csv` with teaching courses from each `.xml`;
-- `./resources/getworksevents.py`: to get all TRABALHOS-EM-EVENTOS;
-- `./resources/grapho.py`: make a plot for interections among researchers;
-- `./resources/index_capes.py`:  calcula os indicadores CAPES;
-- `./resources/paper_jcr.py`: assign jcr score for each paper;
-- `./resources/paper_qualispy`: assign qualis score for each paper;
-- `./resources/read_list_from_txt.py`: read lines from a `txt` files and returns a `list`.
-- `./resources/removefiles_csvproducao.py`: remove `csv` files in folders `./csv_producao/` `./csv_producao_hindex/`  `./relatorio/csv_report/` ;
-- `./resources/report.py`: Write a report with plots and summaries;
-- `./resources/report_class_filteryear.py`: a class to improve report_setup function, a filter for productions;
-- `./resources/report_setup.py`: Analize procuctions file, create setup file, csv to generat report.
-- `./resourcer/report_setup_dict`: create a dictionaru to aid in `report_setup.py`;
-- `./resources/support_report_indexh.py`: functions to aid in index-h calculation;
-- `./resources/support_report.py`: functions to aid in `report.py`
-- `./resources/tidydata_csv.py`: 
-    - this script tidy all csv into folder `csv_producao`;
-    - there are several functions, each one for a kind of data (papers, ppe, ...);
-    - it creates a file `xxxxxx_all.csv` with the same kind of data for all researchers (e.g. fullname_all.csv, papers_all.csv);
-    - <s>it creates a file `xxxxxx_uniq.csv` with the same kind of data for all researchers, HOWEVER in this file there is NO duplicates. Thus a specific paper or project, etc, belongs for am unique reseacher. To assign the owner of the paper or project, etc, the authorship order is used.</s> See `./resources/tidydata_uniq_titles.py:`
-    - from lucyLattes version 1.0, the script `verify.py` was emboided into `tidydata_csv.py`, it  drops rows with NaN values on field **YEAR**
-        - function for general data;
-        - function for research and extension projects;
-        - functions for papers, books, chapters, advising, teaching.
-- `./resources/tidydata_uniq_titles.py:`
-    - working on file from `tidydata_csv.py`, it creates a file `xxxxxx_uniq.csv` with NO `TITLES` duplicates. Thus a specific paper or project, etc, belongs for am unique reseacher. To assign the owner of the paper or project, etc, the authorship order is used. The duplicates `TITLES` are dropped by mean cosine similarity.
-- `./resources/unzip_xml.py`: - unzip `idlattes.zip` and return a `.xml`;
-
-## Logs 
-<a name="logss"></a> 
-
-### Wed 2024-08-14 20:56:51 -04
-- new function to get FORMACAO-ACADEMICA-TITULACAO (graduacao mestrado doutorado) were implemented, the output is in `csv_producao`. 
-### Mon 2024-08-12 18:03:21 -04
-- On `relatorio_producao.html` the initial and final period to evaluate the data (projects, papers, ...) was not working. It was because a date fitering function had not been implemented. It was solved and the report period is the same of year (initial / end) input.
-
-### Sun 2024-08-11 09:14:53 -04
-- On `report.py` had an error to filter projetcts, paper, etc. It was because the `report.py` was reading `config.txt` instead `config_tk.txt.` The issues has been solved with a new functions in `support_functions.py`: `yearlimit_forfilter_tk()` , and some changes in `read_set_config.py` class: `configSetup`. The next step is to fix filter in `report.py`. 
-
-### Sat 2024-08-10 09:33:11 -04
-- On Windows OS there ware a error from `report_resch_advi_runn_each` function and others functions that generates tables from advising data. The error was in `np.select`. For some reason, `np.select` could not find a math between `cond` and `choice` lists in those functions. I guess the error was a character error, because `cond` list has character like: `ç ã í`. To solve it, in `np.select` the default exit was replaced by `-99`
-
-### Wed 2024-06-19 18:57:18 -04
-- From `DADOS-GERAIS` $->$ `FORMACAO-ACADEMICA-TITULACAO` data from `DOUTORADO` was add in `xxx_fullname.csv`
-
-### Mon 2024-05-20 22:41:04 -04
-- A simple `GUI` was implemented in the file `app_lucyLattes.py`. This `GUI` generates the file `./config_tk.txt` with the settings to run `lucyLattes.py`; Some changes were implemented in the
-`class configSetup` (`read_set_config.py`); It was necessary to read the settings in `./config_tk.txt`. The file `config.txt` remains, but it is useless for now; The function `pg_name()` was changed as well, for now it gets PG's name from `./config_tk.txt`;
-
-### Tue 2024-05-14 21:02:57 -04
-- A new method to drop the duplicate `TITLES` has been implemented. This method is based on *cosine similarity* and this algorithm is in the file  `./resources/tidydata_uniq_titles.py:`
-
-### Sat 2023-07-15 09:07:55 -04
-- It was fixed a type error in `report_setup_dict.py`, in *grapho_papernoint* production, the function was change for columngrapho_noint. In `tidydata_csv.py` was created a new function to tidy *worksevents*. It was created a new file `getworksevents.py` to get all *TRABALHOS-EM-EVENTOS*.
-
-### Thu 2022-06-16 16:23:55 -04
-- The file `config.txt` is being read in `lucylattes.py`, and variables are assigned from the class `configSetup()`. It is done for *run indice capes*, *qualis file*, *wos*, *removefiles*. The frame.append method is deprecated and was replaced by pandas.concat.
-
-### Thu 2022-04-14 18:46:34 -04
-- a new function was implemented in `support_functions_indexh.py`, it makes a report of paper's citations for a specific year. Notice that this papers was published in this same year.
-
-### Thu 2022-03-31 19:23:55 -04
-- it was create a new function (`repot_setup_dict.py`) to create a dictionary with basic information to `report_setup.py`.
-
-### Sat 2022-03-26 16:39:41 -04
-- the class `report_class_filteryear.py` has been implemented. For a specific production, it finds a function to filter by years and generate a `csv` report file. This class is used into `report_setup.py`, which is cleaner than before.
-
-### Wed 2022-03-09 18:53:58 -04
-- in `report_setup.py` replace `if` by `case`, it is a better approach, for now its running. in `repor_setup.py` for running advising was implemented a fast lazy solution to solve the issue. It was because in running advising is not necessary to filter by year. The next steps are: to improve report layout, advisor and student interaction in papers.
-
-### Sun 2022-03-06 11:02:51 -04
-- report was improved, advising has been implemented (it was missing). Report aesthetics has been improved for a better visualization.
-
-### Sun 2022-02-27 11:08:02 -04
-- report is done. the output names for h index file has been improved. in the future, i should improve the code for report.py, for now its ok. 
-
-### Sat 2022-02-26 18:08:39 -04
-- individual summaries are done. minor fix in the code was implemented as follow: a new folder for hindex production; report for index h (unique) and group is NOT done. 
-
-### Wed 2022-02-23 20:59:44 -04
-- report group is done, individual summaries is incomplete. 
-
-### Tue 2022-02-22 23:18:05 -04
-- `report.py` has been started. a improvement was implemented to filter the projetcts. it is because may belong partially for a period.
-
-### Mon 2022-02-21 07:15:14 -04
-- report_setup.py was created. in this versions has been created a sub-folder in `relatorio` to store csv files used in `report.py`.
-
-### Sat 2022-02-19 17:50:47 -04
-- grapho is working well. the calculation weights by interactions among researchers is done.
-
-### Wed 2022-02-17 20:32:51 -04
-- new functions to improve tidy data; it was implemented into `tidydata_csv.py`; the main feature is to drop rows with empty values in **YEAR** field.
-
-### Wed 2022-02-16 18:58:42 -04
-- the script (`tidydata_csv`) for tidy and join all data in only one `csv` for each production is done. There are two kinds of joinned `csv`, `xxxxx_all.csv` and `xxxxx_uniq.csv`.
-
-### Tue 2022-02-15 22:48:25 -04
-- the papers were classified by qualis and jcr
-
-### Tue 2022-02-15 20:48:58 -04
-- Short courses was collected from xml file, and a `csv` is created. For all `csv` files a column with **ID** (id lattes) was add. It makes easir to manipulate data in the future. Otherwise, the `csv` file will be a little bit greater.
-
-### Mon 2022-02-14 22:47:16 -04
-- Advising for master, doc, pos-doc and other were collected from xml file, and a `csv` is created.
-
-### Tue 2022-02-08 21:06:43 -04
-- From papers published were add a new feature: from each author if there is the idCNPQ it is extracted. Data from books and chapters are alredy done.
-
-### Wed 2022-02-02 18:59:00 -04
-- Papers published in journal were collected from a xml file, and a `csv` is created. It is necessary add QUALIS and JCR
-
-### Wed 2022-02-02 15:02:03 -04
-- Extraction of the projects in the same year has been solved.
-
-### Tue 2022-02-01 19:03:44 -04
-- Research and extension projects were collected from xml file, and a `csv` is created. It is necessary to review a some extension projetcs wich start in the same year.
-
-### Mon 2022-01-31 16:11:11 -04
-- DADOS-GERAIS were collected from xml file, and a `csv` is created; A git repo has been created.
-
-### Thu 2022-01-18 14:39:22 -04
-- Version 2.0 has been started
-
-## Referências
-
-J. P. Mena-Chalco e R. M. Cesar-Jr. scriptLattes: *An open-source
-knowledge extraction system from the Lattes platform*. Journal of the
-Brazilian Computer Society, vol. 15, n. 4, páginas 31--39, 2009.
-
-Rossum, G. van ( C. voor W. en I. (CWI)). (1995). *Python
-tutorial*. Python (Vol. 206). Amsterdam. 
-
-https://docs.python.org/pt-br/3/library/venv.html
-
-https://docs.python.org/pt-br/3/tutorial/venv.html
-
-## Autor
-
-- Rafael Tieppo
+Pelo terminal, com o **ambiente virtual ATIVADO**, acesse o diretório onde o PPGEE-Lucy foi instalado e digite:
+
+`python3 app_ppgeelucy.py`
+
+Se a instalação estiver correta, o programa iniciará sua execução e, ao seu final, gravará os dados de saída do PPGEE no diretório `ppgee_data` O relatório gerado pelo `lucylattes` original estará no diretório `relatório`.
+
+## Configurações:
+
+1. As configurações originais para a execução do `lucylattes`estão no arquivo config_tk.txt. Estas configurações continuam a ser utilizadas pelo PPGEE-lucy e podem ser modificadas editando o arquivo. As linhas do arquivo devem ser mantidas na ordem em que se encontram e são as seguintes:
+- ano inicial:2021
+- ano final:2024
+- qualis:qualis_todasareas_periodicos_2020.csv
+- pg:Programa de Pós Graduação em Engenharia Elétrica - UFMG
+- apagar csv_producao:0
+- calcular indcapes:0
+- calcular hwebsci:0
+Onde ano inicial e ano final são os anos do período para o qual o relatório será gerado; 
+qualis é o arquivo que será usado para a classificação Qualis dos artigos publicados (os arquivos de classificação estão na pasta jcr_qualis). Uma observação é que para as Engenharias IV o arquivo a ser usado atualmente é o qualis_todasareas_periodicos_2020.csv;
+pg é o nome do programa de pós graduação em análise;
+apagar_csv_producao indica, caso igual a 1, que os arquivos .csv gerados durante a execução do programa devem ser apagados ao final da execução (tenho sempre mantido ele igual a 0 (zero));
+calcular indcapes indica, caso igual a 1, que os indicadores da capes devem ser calculados. Na realidade, esses indicadores ainda estão em fase de testes, não são calculados pelo lucylattes;
+calcular hwebsci indica, caso igual a 1, que o "índice h" deve ser calculado.
+2. As configurações para o PPGEE-Lucy estão no arquivo config_ppgee.txt. Assim como no caso anterior, as linhas do arquivo devem ser mantidas na ordem em que se encontram e são as seguintes: 
+- run_html_report: 0
+- run_authors_classification: 1
+- authors_classification_year: 2020
+Onde run_html_report indica, caso igual a 1, que o relatório html original do script lucylattes deve ser gerado;
+run_authors_classification indica, caso igual a 1, que a classificação dos autores de artigos (se docentes, discentes, egressos) deve ser gerada;
+authors_classification_year é o ano que deve ser usado para a classificação dos autores de artigos. A classificação dos autores depende do ano (um discente neste ano pode se transformar em um egresso no ano seguinte, por exemplo).
+
+## Arquivos de dados:
+
+O PPGEE-Lucy utiliza os arquivos gerados pelos scripts do `lucylattes` e que são armazenados no diretório csv_producao. Ao rodar o app_ppgeelucy.py esses arquivos são automaticamente gerados a partir dos currículos Lattes armazenados no diretório xml_zip.
+Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados que devem ser colocados no diretório ppgee_data:
+
+- Discentes-PPGEE-ano.csv : arquivo csv com os discentes do PPGEE no ano específico - por exemplo Discentes-PPGEE-2020.csv para o ano de 2020 e Discentes-PPGEE-2022.csv para o ano de 2022. Formato do arquivo: arquivo de texto, com os nomes do discente e do orientador separados por virgula e cada par de discente/orientador separado do seguinte por fim-de-linha. Caso um discente tenha mais de uma forma como o nome aparece nas publicacoes, basta incluir na lista as varias formas.
+- Egressos-PPGEE-ano.csv: arquivo csv com os egressos do PPGEE: por exemplo Egressos-PPGEE-2020.csv, que contém os egressos do ano de 2020 e, pelo menos, dos cinco anos anteriores (2015 a 2019). Formato do arquivo: arquivo de texto, com o nome do egresso, seu CPF, Nível (se Mestrado ou Doutorado), nome do orientador e ano de defesa, separados por virgula. Caso um egresso tenha mais de uma forma como o nome aparece nas publicacoes, basta incluir na lista as varias formas, uma em cada linha.
+- Docentes-PPGEE-NomesAlternativos-ano.csv: por exemplo, Docentes-PPGEE-NomesAlternativos-2020.csv para o ano de 2020. Arquivo csv com nomes alternativos para os docentes do PPGEE. Os nomes "oficiais", completos, dos docentes são gerados a partir da leitura dos currículos Lattes presentes no diretório xml_zip. Porém, existem situações (como, por exemplo, o caso em que o docente tem o sobrenome "FILHO", ou então "JUNIOR") em que versões alternativas dos nomes devem ser utilizadas. Nesse caso, basta incluir as versões (uma em cada linha) nesse arquivo.
+
+## Arquivos de saida:
+
+- Os arquivos no diretório csv_producao podem ser usados diretamente para análise da produção do programa;
+- Os arquivos no diretório relatorio contêm uma síntese da produção do programa. Abra o arquivo relatorio_producao.html com um navegador para visualizar;
+- Os arquivos artigosclassificados-PPGEE-ano.csv e eventosclassificados-PPGEE-ano.csv, no diretório ppgee_data contêm a classificação (se docentes, discentes ou egressos) dos autores dos artigos em periódicos ou em eventos publicados no ano específico.
+
+## Observações:
+
+- No PPGEE-Lucy ainda há a possibilidade de rodar o `lucylattes` original. Basta executar, com o python3, o aplicativo app_lucy-Lattes,py ao invés do app_ppgeelucy.py. Maiores detalhes, ver a documentação no site original do `lucylattes` - https://github.com/rafatieppo/lucylattes ;
+- Os arquivos do PPGEE-Lucy estão bem separados dos arquivos do `lucylattes` original. Código de funções no diretório ppgee_resources (os do `lucylattes`estão no diretório resources) e arquivos de dados e saída de resultados no diretório ppgee_data. Os arquivos app_ppgeelucy.py e ppgeelucy.py, presentes no diretório de instalação do PPGEE-Lucy, não interferem nos arquivos originais do `lucylattes`também presentes neste diretório (app_lucyLattes.py, lucyLattes.py)
+
+## A fazer:
+
+- Incluir a identificação de autores que sejam alunos de graduação. Isso não parece complicado, basta usar a mesma lógica de identificação de discentes ou de egressos. No caso do PPGEE-UFMG a maior dificuldade parece estar na obtenção dos dados dos alunos da graduação;
+- Gerar os indicadores utilizados pela Comissão de Área das Engenharias IV;
+- Incluir o algoritmo utilizado no PPGEE-UFMG no credenciamento/recredenciamento de docentes;
+- Incluir ferramentas para a detecção de anomalias nos dados do PPGEE-UFMG.
+
+## Autores:
+- Renato Cardoso Mesquita (PPGEE-Lucy)
+- rencmbr@gmail.com
+- https://github.com/rencmbr
+
+Baseado nos trabalhos de:
+- Rafael Tieppo (autor do `lucylattes`)
 - rafaeltieppo@yahoo.com.br
 - https://rafatieppo.github.io/
 
+E no de Ricardo Hiroshi Caldeira Takahashi (classificação de autores)
 
 ## xml schemas
 
