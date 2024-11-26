@@ -146,9 +146,7 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados que d
 - Incluir ferramentas para a detecção de anomalias nos dados do PPGEE-UFMG.
 
 ## Autores:
-- Renato Cardoso Mesquita (PPGEE-Lucy)
-- rencmbr@gmail.com
-- https://github.com/rencmbr
+- Renato Cardoso Mesquita (PPGEE-Lucy), rencmbr@gmail.com, https://github.com/rencmbr
 
 Baseado nos trabalhos de:
 - Rafael Tieppo (autor do `lucylattes`), rafaeltieppo@yahoo.com.br , https://rafatieppo.github.io/
