@@ -59,7 +59,7 @@ source .venv/bin/activate
 
 (.venv) renato@renato-mint:~/my-lucylattes/ppgeelucy$  
 ```
-(note o (.venv) no início do "prompt" de comando, indicando que o ambiente virtual está ativado.
+note o (.venv) no início do "prompt" de comando, indicando que o ambiente virtual está ativado.
 
 3. Para Desativar o ambiente virtual:
 
@@ -99,7 +99,8 @@ Se a instalação estiver correta, o programa iniciará sua execução e, ao seu
 - calcular indcapes:0
 - calcular hwebsci:0
 
-- Onde ano inicial e ano final são os anos do período para o qual o relatório será gerado; 
+Onde:
+- ano inicial e ano final são os anos do período para o qual o relatório será gerado; 
 - qualis é o arquivo que será usado para a classificação Qualis dos artigos publicados (os arquivos de classificação estão na pasta jcr_qualis). Uma observação é que para as Engenharias IV o arquivo a ser usado atualmente é o qualis_todasareas_periodicos_2020.csv;
 - pg é o nome do programa de pós graduação em análise;
 - apagar_csv_producao indica, caso igual a 1, que os arquivos .csv gerados durante a execução do programa devem ser apagados ao final da execução (tenho sempre mantido ele igual a 0 (zero));
@@ -112,9 +113,10 @@ Se a instalação estiver correta, o programa iniciará sua execução e, ao seu
 - run_authors_classification: 1
 - authors_classification_year: 2020
 
-Onde run_html_report indica, caso igual a 1, que o relatório html original do script lucylattes deve ser gerado;
-run_authors_classification indica, caso igual a 1, que a classificação dos autores de artigos (se docentes, discentes, egressos) deve ser gerada;
-authors_classification_year é o ano que deve ser usado para a classificação dos autores de artigos. Isto é necessário porque classificação dos autores depende do ano (um discente neste ano pode se transformar em um egresso no ano seguinte, por exemplo).
+Onde:
+- run_html_report indica, caso igual a 1, que o relatório html original do script lucylattes deve ser gerado;
+- run_authors_classification indica, caso igual a 1, que a classificação dos autores de artigos (se docentes, discentes, egressos) deve ser gerada;
+- authors_classification_year é o ano que deve ser usado para a classificação dos autores de artigos. Isto é necessário porque classificação dos autores depende do ano (um discente neste ano pode se transformar em um egresso no ano seguinte, por exemplo).
 
 ## Arquivos de dados:
 
@@ -149,11 +151,8 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados que d
 - https://github.com/rencmbr
 
 Baseado nos trabalhos de:
-- Rafael Tieppo (autor do `lucylattes`)
-- rafaeltieppo@yahoo.com.br
-- https://rafatieppo.github.io/
-
-E no de Ricardo Hiroshi Caldeira Takahashi (classificação de autores)
+- Rafael Tieppo (autor do `lucylattes`), rafaeltieppo@yahoo.com.br , https://rafatieppo.github.io/
+- Ricardo Hiroshi Caldeira Takahashi (classificação de autores) 
 
 ## xml schemas
 
