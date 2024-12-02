@@ -118,7 +118,7 @@ def credenciamento_ppgee():
     iter = 0
     dir_base = 'ppgee_out/credenciamento/'
 
-    # Remove csv file in folder credenciamento.
+    # Remove csv files no diretorio credenciamento.
     fileToRemove = glob.glob(dir_base + '*.csv')
     for ff in fileToRemove:
         try:
@@ -136,10 +136,12 @@ def credenciamento_ppgee():
         # Conta o número de docentes autores por artigo
         NUMERO_DOCENTES_ARTIGO = conta_docentes_artigo(ARTIGO_TABELA_AUTORES,docentes)
         artigos_na_faixa_de_anos["NUM_DOCENTES"]= NUMERO_DOCENTES_ARTIGO
-        fileartigos = dir_base + 'artigos'+str(iter) + '.csv'
-        artigos_na_faixa_de_anos.to_csv(fileartigos)
         ppq = compute_ppq(artigos_na_faixa_de_anos,df_docentes)
         df_docentes["PPQ"] = ppq
+        artigos_na_faixa_de_anos.sort_values(by=["FULL_NAME", "YEAR", "QUALIS"], inplace=True)
+        fileartigos = dir_base + 'artigos'+str(iter) + '.csv'
+        usecols = ['FULL_NAME', 'TITLE','YEAR','DOI', 'JOURNAL', 'ISSN', 'QUALIS', 'JCR', 'NUM_DOCENTES','AUTHOR' ]
+        artigos_na_faixa_de_anos.to_csv(fileartigos, columns=usecols)
         df_docentes.sort_values(by="PPQ", inplace=True, ascending=False)
         filedocentes = dir_base + 'docentes'+str(iter) + '.csv'
         df_docentes.to_csv(filedocentes)
