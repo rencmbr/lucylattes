@@ -5,6 +5,7 @@
 import re
 import pandas as pd
 from datetime import datetime
+from collections import OrderedDict
 
 def regulariza(texto):
     texto = texto.upper()
@@ -32,6 +33,8 @@ def regulariza_autores(autores):
     for lista_nomes in autores:
         Sobrenome = []
         Prenome = []
+        # Remove duplicatas da lista de autores - alguns autores aparecem mais de uma vez!!!
+        lista_nomes = list(OrderedDict.fromkeys(lista_nomes))
         for i in range(len(lista_nomes)):
             nomes = lista_nomes[i].split(' ')
             flag_nome = False
@@ -316,9 +319,9 @@ def identifica_tipo_autores(ARTIGO_TABELA_AUTORES,docente_tabela,
 def insere_classificacao_autores(df,TIPO_AUTOR_ARTIGO):  
     lista_autores = df["AUTHOR"].to_list()
     autores_classificados = []
-    for i in range(len(lista_autores)):
+    for i in range(len(TIPO_AUTOR_ARTIGO)):
         classificados = []
-        for j in range(len(lista_autores[i])):
+        for j in range(len(TIPO_AUTOR_ARTIGO[i])):
                 adiciona = lista_autores[i][j] + ' (' + TIPO_AUTOR_ARTIGO[i][j] + ')'
                 classificados.append(adiciona) 
         autores_classificados.append(classificados)
