@@ -6,6 +6,7 @@
 import pandas as pd
 import os
 import glob
+from collections import OrderedDict
 
 import ppgee_resources.authorsclassification as ac
 from resources.support_functions import yearlimit_forfilter
@@ -31,6 +32,13 @@ def get_artigos_faixa_anos_com_duplicados(id_docentes_a_remover):
 
     df["AUTHOR"] = df["AUTHOR"].apply(ac.regulariza)
     df["AUTHOR"] = df["AUTHOR"].apply(eval)
+
+    # Remove duplicados da lista de autores
+    listaautores = df['AUTHOR'].to_list()
+    for i in range(len(listaautores)):
+        autoresartigo = listaautores[i]
+        listaautores[i] = list(OrderedDict.fromkeys(autoresartigo))
+    df["AUTHOR"] = listaautores
 
     return df
 

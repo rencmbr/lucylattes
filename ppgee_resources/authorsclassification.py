@@ -33,8 +33,6 @@ def regulariza_autores(autores):
     for lista_nomes in autores:
         Sobrenome = []
         Prenome = []
-        # Remove duplicatas da lista de autores - alguns autores aparecem mais de uma vez!!!
-        lista_nomes = list(OrderedDict.fromkeys(lista_nomes))
         for i in range(len(lista_nomes)):
             nomes = lista_nomes[i].split(' ')
             flag_nome = False
@@ -206,6 +204,13 @@ def tabela_artigos(year) :
 
     df["AUTHOR"] = df["AUTHOR"].apply(regulariza)
     df["AUTHOR"] = df["AUTHOR"].apply(eval)
+
+    #Remove autores duplicados na lista de autores
+    listaautores = df['AUTHOR'].to_list()
+    for i in range(len(listaautores)):
+        autoresartigo = listaautores[i]
+        listaautores[i] = list(OrderedDict.fromkeys(autoresartigo))
+    df["AUTHOR"] = listaautores
 
     return df
        
