@@ -12,6 +12,7 @@ class PPGEEconfigSetup:
         self.run_html = config_lines[0].split(':')[1]
         self.run_authorsclassification = config_lines[1].split(':')[1]
         self.classificationyear = config_lines[2].split(':')[1]
+        self.run_credenciamento = config_lines[3].split(':')[1]
         
 
     def run_html_report(self):
@@ -33,4 +34,11 @@ class PPGEEconfigSetup:
         classificationyear = self.classificationyear.rstrip('\n')
         classificationyear = classificationyear.strip(' ')
         return classificationyear
+    
+    def run_credenciamento_ppgee(self):
+        """Return 1 or 0 from config_ppgee.txt to run or not the credenciamento docente"""
+        run_credenciamento = self.run_credenciamento.rstrip('\n')
+        run_credenciamento = run_credenciamento.strip(' ')
+        run_credenciamento = int(run_credenciamento)
+        return run_credenciamento
 

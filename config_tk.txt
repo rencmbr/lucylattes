@@ -1,5 +1,5 @@
-ano inicial:2021
-ano final:2024
+ano inicial:2020
+ano final:2023
 qualis:qualis_todasareas_periodicos_2020.csv
 pg:Programa de Pós Graduação em Engenharia Elétrica - UFMG
 apagar csv_producao:0

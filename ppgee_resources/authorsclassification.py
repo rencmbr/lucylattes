@@ -4,6 +4,7 @@
 
 import re
 import pandas as pd
+from datetime import datetime
 
 def regulariza(texto):
     texto = texto.upper()
@@ -21,6 +22,9 @@ def regulariza(texto):
     texto = texto.replace('Ñ','N')
     texto = texto.replace('.','. ')
     return texto
+
+def extrai_ano_string(data_str):
+    return datetime.strptime(data_str, '%d/%m/%y').year
 
 def regulariza_autores(autores):
     tabela_sobrenomes = []
@@ -60,74 +64,74 @@ def regulariza_nomes(lista_nomes):
         Sobrenome.append(sobrenome)
     return [Prenome,Sobrenome]
 
-def tabela_docentes_autores(year):
+def tabela_docentes_autores(id_docentes_a_remover):
     # ====================================================
     # Constroi tabela de nomes de docentes do PPGEE
     # ====================================================
     # Busca os dados dos nomes lidos do currículo Lattes
     #
-    usecols = ["FULL_NAME"]
+    usecols = ["FULL_NAME", "ID"]
     df = pd.read_csv('./csv_producao/fullname_all.csv', usecols=usecols,
-                        header=0, dtype=str)
-    docente=[]
-
-    for idx in range(len(df)):
-        nome_entrada = df.iloc[idx,0]
-        nome = regulariza(nome_entrada)
-        docente.append(nome)
+                        header=0, dtype=str, keep_default_na=False)
+    
+    # Remove os docentes que estão na lista de IDs a remover
+    df = df.drop(df[df['ID'].isin(id_docentes_a_remover)].index)
+    df.reset_index(inplace=True, drop=True)
+    
+    df['FULL_NAME']=df['FULL_NAME'].apply(regulariza)
+    docente=df["FULL_NAME"].to_list()
 
     # Busca versões alternativas de nomes no arquivo suplementar de docentes 
     # Por exemplo, docentes com "FILHO" e "JUNIOR" no sobrenome
-    filenomesalternativos="ppgee_data/Docentes-PPGEE-NomesAlternativos-" + year + ".csv"
-    df = pd.read_csv(filenomesalternativos, header=0, dtype=str) 
-    for idx in range(len(df)):
-        nome_entrada = df.iloc[idx,0]
+    filenomesalternativos="ppgee_data/Docentes-PPGEE-NomesAlternativos.csv"
+    dfa = pd.read_csv(filenomesalternativos, header=0, dtype=str) 
+
+    for idx in range(len(dfa)):
+        nome_entrada = dfa.iloc[idx,0]
         nome = regulariza(nome_entrada)
         docente.append(nome)  
   
     docente_tabela = regulariza_nomes(docente) 
-    return docente_tabela
+    return docente_tabela, df
     # ====================================================
 
 def tabela_egressos_orientadores(year):
     # ====================================================
     # Constroi tabela de nomes de egressos e orientadores
     # ====================================================
-    # a partir de arquivo com os nomes completos dos egressos e orientadores.
+    # Le arquivo com os nomes completos dos egressos e orientadores.
     # Formato do arquivo: arquivo de texto, com os nomes do egresso
-    # e do orientador separados por ponto-e-virgula e cada par de
-    # egresso/orientador separado do seguinte por fim-de-linha.
-    # OBS: na realidade há campos para mais informações, como CPF, etc.
-    # abrir o arquivo csv para ver os demais campos
+    # o nivel (M ou D), o número de matrícula, nome do orientador 
+    # e data de defesa.
+    # O arquivo tem formato csv (campos separados por virgula) e possui
+    # cabeçalhos com os nomes das colunas
+    # "FULL_NAME", "NIVEL", "MATRICULA", "ORIENTADOR" e "DEFESA"
     # Caso um egresso tenha mais de uma forma como o nome aparece
     # nas publicacoes, basta incluir na lista as varias formas.
+    # OBS: Para um determinado ano, são considerados egressos
+    # os que defenderam trabalho até 5 anos antes. Por exemplo,
+    # caso o ano seja 2020, buscam-se os dados para os alunos que
+    # defenderam de 2015 a 2019 e mais os de 2020.
     
+    usecols = ["FULL_NAME", "NIVEL", "ORIENTADOR", "DEFESA"]
     fileegressos="ppgee_data/Egressos-PPGEE-" + year + ".csv"
-    tabela = []
-    filekey = open(fileegressos)
-    for linha in filekey:
-        linha = linha.rstrip().split(",")
-        tabela.append(linha)
-    filekey.close()
+    df = pd.read_csv(fileegressos, usecols=usecols,
+                        header=0, dtype=str, keep_default_na=False)
+    ano = int(year)
+    lsyear_limits = [ano-5, ano]
+   
+    df['DEFESA'] = [extrai_ano_string(yy) for yy in df['DEFESA'].to_list()]
+    df = df[(df['DEFESA'] >= lsyear_limits[0]) &
+                (df['DEFESA'] <= lsyear_limits[1])]
+    df.reset_index(inplace=True, drop=True)
 
-    egresso = [];
-    orientador = [];
-    ano = [];
-    for entrada in tabela[1:]:
-        nome1 = entrada[0]
-        nome1 = regulariza(nome1)
-        nome2 = entrada[3]
-        nome2 = regulariza(nome2)
-        data_defesa = entrada[4]
-        ano_defesa = int(data_defesa)
-        egresso.append(nome1)
-        orientador.append(nome2)
-        ano.append(ano_defesa)
+    df["FULL_NAME"] = df["FULL_NAME"].apply(regulariza)
+    df["ORIENTADOR"] = df["ORIENTADOR"].apply(regulariza)
+   
+    egresso_tabela = regulariza_nomes(df["FULL_NAME"].to_list())
+    orientador_egr_tabela = regulariza_nomes(df["ORIENTADOR"].to_list())
 
-    egresso_tabela = regulariza_nomes(egresso)
-    orientador_egr_tabela = regulariza_nomes(orientador)
-
-    return egresso_tabela, orientador_egr_tabela, ano
+    return egresso_tabela, orientador_egr_tabela, df['NIVEL'].to_list(), df['DEFESA'].to_list()
     # ====================================================
 
 def tabela_discentes_orientadores(year):
@@ -143,27 +147,43 @@ def tabela_discentes_orientadores(year):
     # nas publicacoes, basta incluir na lista as varias formas.
     
     filediscentes = "ppgee_data/Discentes-PPGEE-" + year + ".csv"
-    tabela = []
-    filekey = open(filediscentes)
-    for linha in filekey:
-        linha = linha.rstrip().split(",")
-        tabela.append(linha)
-    filekey.close()
+    usecols = ["FULL_NAME", "NIVEL", "ORIENTADOR"]
+    df = pd.read_csv(filediscentes, usecols=usecols,
+                        header=0, dtype=str, keep_default_na=False)
 
-    discente = [];
-    orient_dis = [];
-    for entrada in tabela[1:]:
-        nome1 = entrada[0]
-        nome1 = regulariza(nome1)
-        nome2 = entrada[1]
-        nome2 = regulariza(nome2)
-        discente.append(nome1)
-        orient_dis.append(nome2)
-
-    discente_tabela = regulariza_nomes(discente)
-    orientador_dis_tabela = regulariza_nomes(orient_dis)
-    return discente_tabela , orientador_dis_tabela
+    df["FULL_NAME"] = df["FULL_NAME"].apply(regulariza)
+    df["ORIENTADOR"] = df["ORIENTADOR"].apply(regulariza)
+   
+    discente_tabela = regulariza_nomes(df["FULL_NAME"].to_list())
+    orientador_dis_tabela = regulariza_nomes(df["ORIENTADOR"].to_list())
+ 
+    return discente_tabela , orientador_dis_tabela, df['NIVEL'].to_list()
     # ===================================================
+def tabela_posdoc(year):
+    # ====================================================
+    # Constroi tabela de nomes de pos-docs
+    # ====================================================
+    # Le arquivo com os nomes completos dos posdocs.
+    # Formato do arquivo: arquivo de texto, com os nomes do egresso
+    # o nivel (P), o número de matrícula, nome do orientador 
+    # e data de defesa do doutorado.
+    # O arquivo tem formato csv (campos separados por virgula) e possui
+    # cabeçalhos com os nomes das colunas
+    # "FULL_NAME", "NIVEL", "MATRICULA", "ORIENTADOR" e "DEFESA"
+    # Caso um posdoc tenha mais de uma forma como o nome aparece
+    # nas publicacoes, basta incluir na lista as varias formas.
+    
+    usecols = ["FULL_NAME", "NIVEL", "ORIENTADOR", "DEFESA"]
+    fileposdoc="ppgee_data/Posdoc-PPGEE-" + year + ".csv"
+    df = pd.read_csv(fileposdoc, usecols=usecols,
+                        header=0, dtype=str, keep_default_na=False)
+    ano = int(year)
+
+    df["FULL_NAME"] = df["FULL_NAME"].apply(regulariza)
+
+    posdoc_tabela = regulariza_nomes(df["FULL_NAME"].to_list())
+   
+    return posdoc_tabela
 
 def tabela_artigos(year) :
     # ===================================================
@@ -173,7 +193,7 @@ def tabela_artigos(year) :
     # Le os dados que serão usados (todos os artigos, já removidos os duplicados)
     usecols = ["TITLE","YEAR","DOI", "JOURNAL","ISSN","AUTHOR","QUALIS"]
     df = pd.read_csv('./csv_producao/papers_uniq.csv', usecols=usecols,
-                        header=0, dtype=str)
+                        header=0, dtype=str, keep_default_na=False)
 
     # Filtra os artigos do ano específico 
 
@@ -194,7 +214,7 @@ def tabela_eventos(year):
     # Le os dados que serão usados (todas as produções, já removidas as duplicatas)
     usecols = ["TITLE","YEAR","AUTHOR"]
     df = pd.read_csv('./csv_producao/worksevents_uniq.csv', usecols=usecols,
-                        header=0, dtype=str)
+                        header=0, dtype=str, keep_default_na=False)
     # Filtra os artigos do ano específico 
  
     resultado = list(df["YEAR"] == year) 
@@ -206,8 +226,9 @@ def tabela_eventos(year):
 
     return df
 
-def identifica_tipo_autores(ARTIGO_TABELA_AUTORES,docente_tabela,egresso_tabela,
-                       discente_tabela,orientador_egr_tabela,orientador_dis_tabela):
+def identifica_tipo_autores(ARTIGO_TABELA_AUTORES,docente_tabela,
+                            egresso_tabela, nivel_egresso, ano_egresso, 
+                            posdoc_tabela,discente_tabela, nivel_discente):
     # ====================================================
     # Identifica autores de artigos (em periódicos ou em eventos)
     # ====================================================
@@ -249,26 +270,17 @@ def identifica_tipo_autores(ARTIGO_TABELA_AUTORES,docente_tabela,egresso_tabela,
                         k = egresso_tabela[1].index(lista_autores_sobrenome[j],k+1)
                         if lista_autores_prenome[j] == egresso_tabela[0][k]:
                             find_tipo = True
-                            if orientador_egr_tabela[1][k] in lista_autores_sobrenome:
-                                tipo.append('egresso')
-                            else:
-                                tipo.append('egresso(s/o)')
+                            tipo.append('egresso('+ nivel_egresso[k] + '-' + str(ano_egresso[k]) + ')')
                             break
 
                         elif lista_autores_prenome[j][0] == egresso_tabela[0][k][0] and len(lista_autores_prenome[j])==1:
                             find_tipo = True
-                            if orientador_egr_tabela[1][k] in lista_autores_sobrenome:
-                                tipo.append('egresso?')
-                            else:
-                                tipo.append('egresso?(s/o)')
+                            tipo.append('egresso?('+ nivel_egresso[k] + '-' + str(ano_egresso[k]) + ')')
                             break
 
                         elif lista_autores_prenome[j][0] == egresso_tabela[0][k][0] and lista_autores_prenome[j][1]=='.':
                             find_tipo = True
-                            if orientador_egr_tabela[1][k] in lista_autores_sobrenome:
-                                tipo.append('egresso?')
-                            else:
-                                tipo.append('egresso?(s/o)')
+                            tipo.append('egresso?('+ nivel_egresso[k] + '-' + str(ano_egresso[k]) + ')')
                             break
 
             if not find_tipo:
@@ -279,13 +291,23 @@ def identifica_tipo_autores(ARTIGO_TABELA_AUTORES,docente_tabela,egresso_tabela,
                         k = discente_tabela[1].index(lista_autores_sobrenome[j],k+1)
                         if lista_autores_prenome[j] == discente_tabela[0][k]:
                             find_tipo = True
-                            if orientador_dis_tabela[1][k] in lista_autores_sobrenome:
-                                tipo.append('discente')
-                            else:
-                                tipo.append('discente(s/o)')
+                            tipo.append('discente('+ nivel_discente[k] + ')')
                             break
+        
+            if not find_tipo:
+                if lista_autores_sobrenome[j] in posdoc_tabela[1]:
+                    count = posdoc_tabela[1].count(lista_autores_sobrenome[j])
+                    k = -1
+                    for q in range(count):
+                        k = posdoc_tabela[1].index(lista_autores_sobrenome[j],k+1)
+                        if lista_autores_prenome[j] == posdoc_tabela[0][k]:
+                            find_tipo = True
+                            tipo.append('posdoc')
+                            break
+            
             if not find_tipo:
                 tipo.append('externo')
+        
         TIPO_AUTOR_ARTIGO.append(tipo)
         CONTAGEM_DOCENTES.append(contagem_docentes)
 
@@ -309,15 +331,18 @@ def authors_classification(year):
     #===========================================================================
     #
     # Classifica os autores de artigos e trabalhos em eventos (docentes, discentes
-    # egressos ou externos)
+    # egressos, posdoc ou externos)
 
     # Busca os dados necessários 
-    # tabela de docentes
-    docente_tabela = tabela_docentes_autores(year)
+    # tabela de docentes - a principio a lista de ids a remover é vazia
+    ids_a_remover = []
+    docente_tabela, df = tabela_docentes_autores(ids_a_remover)
     # tabela de egressos, seus orientadores e ano de defesa
-    egresso_tabela, orientador_egr_tabela, ano = tabela_egressos_orientadores(year)
+    egresso_tabela, orientador_egr_tabela, nivel_egresso, ano_egresso = tabela_egressos_orientadores(year)
     # tabela de discentes e seus orientadores
-    discente_tabela , orientador_dis_tabela = tabela_discentes_orientadores(year)
+    discente_tabela , orientador_dis_tabela, nivel_discente = tabela_discentes_orientadores(year)
+    # tabela de pos_docs
+    posdoc_tabela = tabela_posdoc(year)
 
     # Dataframes com os dados dos artigos em periódicos e em eventos
     artigos = tabela_artigos(year)
@@ -329,11 +354,13 @@ def authors_classification(year):
 
     # Classifica os autores de artigos em periodicos e em eventos
     TIPO_AUTOR_ARTIGO = identifica_tipo_autores(ARTIGO_TABELA_AUTORES,docente_tabela,
-                                                egresso_tabela, discente_tabela,
-                                                orientador_egr_tabela,orientador_dis_tabela)
+                                                egresso_tabela, nivel_egresso, ano_egresso,
+                                                posdoc_tabela,
+                                                discente_tabela,nivel_discente)
     TIPO_AUTOR_EVENTO = identifica_tipo_autores(EVENTO_TABELA_AUTORES,docente_tabela,
-                                                egresso_tabela, discente_tabela,
-                                                orientador_egr_tabela,orientador_dis_tabela)
+                                                egresso_tabela, nivel_egresso, ano_egresso,
+                                                posdoc_tabela,
+                                                discente_tabela, nivel_discente)
     
     # Insere a classificação dos autores nos dataframes de artigos em periodicos e eventos
 
@@ -341,13 +368,15 @@ def authors_classification(year):
     eventos_com_autores_classificados = insere_classificacao_autores(eventos,TIPO_AUTOR_EVENTO)
 
     # Gera os artigos (.csv) com os dados dos artigos e classificação dos autores
+
+    out_path = 'ppgee_out/classificaautores/'
     
     columns = ["TITLE","YEAR","DOI", "JOURNAL","ISSN","QUALIS","CLASSIFIED_AUTHORS"]
-    file_saida_artigos = 'ppgee_out/artigosclassificados-PPGEE-' + year + '.csv'
+    file_saida_artigos = out_path + 'artigosclassificados-PPGEE-' + year + '.csv'
     artigos_com_autores_classificados.to_csv(file_saida_artigos, columns=columns)
     print('- O arquivo com a classificação dos autores de artigos foi gerado em ', file_saida_artigos)
 
     columns = ["TITLE","YEAR","CLASSIFIED_AUTHORS"]
-    file_saida_eventos = 'ppgee_out/eventosclassificados-PPGEE-' + year + '.csv'
+    file_saida_eventos = out_path + 'eventosclassificados-PPGEE-' + year + '.csv'
     eventos_com_autores_classificados.to_csv(file_saida_eventos, columns=columns)
     print('- O arquivo com a classificação dos autores de publicações em eventos foi gerado em ', file_saida_eventos)

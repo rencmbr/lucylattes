@@ -160,3 +160,5 @@ relatorio/
 relatorio/figures/
 relatorio/*.html
 ppgee_out/
+ppgee_data/*.xlsx
+ppgee_data/*.xls
