@@ -111,14 +111,14 @@ Onde:
 
 - run_html_report: 1
 - run_authors_classification: 1
-- authors_classification_year: 2020
+- authors_classification_year: 2023
 - run_credenciamento:1
 
 Onde:
 - run_html_report indica, caso igual a 1, que o relatório html original do script lucylattes deve ser gerado;
 - run_authors_classification indica, caso igual a 1, que a classificação dos autores de artigos (se docentes, discentes, pós-docs ou egressos) deve ser gerada;
 - authors_classification_year é o ano que deve ser usado para a classificação dos autores de artigos. Isto é necessário porque classificação dos autores depende do ano (um discente neste ano pode se transformar em um egresso no ano seguinte, por exemplo).
-- run_credenciamento indica, caso igual a 1, que o algoritmo de credenciamento de docentes do PPGEE deve ser executado. Nesse caso, a faixa de anos utilizada para o credenciamento será buscada no arquivo config_tk.txt (ano inicial e ano final). Por exemplo, ao executar o algoritmo de credenciamento no início de 2024, a faixa de anos deve ser dos quatro anos anteriores, isto é, ano inicial:2020 e ano final:2023. Para rodar o algoritmo no meio de 2024, a faiza de anos deve ser dos tres anos anteriores mais o ano atual, isto é, ano inicial:2021 e ano final:2024.
+- run_credenciamento indica, caso igual a 1, que o algoritmo de credenciamento de docentes do PPGEE deve ser executado. Nesse caso, a faixa de anos utilizada para o credenciamento será buscada no arquivo config_tk.txt (ano inicial e ano final). Por exemplo, ao executar o algoritmo de credenciamento no início de 2024, a faixa de anos deve ser dos quatro anos anteriores, isto é, ano inicial:2020 e ano final:2023. Para rodar o algoritmo no meio de 2024, a faixa de anos deve ser dos tres anos anteriores mais o ano atual, isto é, ano inicial:2021 e ano final:2024.
 
 ## Arquivos de dados:
 
