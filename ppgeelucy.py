@@ -49,7 +49,6 @@ def run_ppgeeLucy():
         resources.getproductsppect(zipname, minidomdoc)
         resources.getproductsppeadv(zipname, minidomdoc)
 
-
     resources.tidydata_ppe()
     resources.tidydata_worksevents()
     resources.tidydata_papers()
@@ -69,7 +68,6 @@ def run_ppgeeLucy():
     turn_authors_classification = configsPPGEE.run_authors_classification()
     authors_classification_year = configsPPGEE.classification_year()
     turn_credenciamento = configsPPGEE.run_credenciamento_ppgee()
-
     
     if turn_hwebsci_index == 1:
         resources.getindex_hwebsci()
@@ -94,8 +92,7 @@ def run_ppgeeLucy():
 
     if turn_credenciamento == 1:
         credenciamento_ppgee()    
-    
-
+  
     if turn_rm_csvfiles == 1:
         resources.remove_csv_producao()
     else:
@@ -105,5 +102,3 @@ def run_ppgeeLucy():
     time_final = time.time()
     total_time = time_final - time_initial
     print('The total time was: {} minutes.'.format(total_time/60))
-
-    # ------------------------------------------------------------
