@@ -136,7 +136,7 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados, que 
 - Os arquivos no diretório relatorio contêm uma síntese da produção do programa. Abra o arquivo relatorio_producao.html com um navegador para visualizar;
 - Os arquivos artigosclassificados-PPGEE-ano.csv e eventosclassificados-PPGEE-ano.csv, no diretório ppgee_out/classificaautores/, contêm a classificação (se docentes, discentes, egressos ou posdoc) dos autores dos artigos em periódicos ou em eventos publicados no ano específico.
 - Os arquivos docentesi.csv, com i variando de 0 até o índice da última iteração do algoritmo de credenciamento do PPGEE, estão localizados na pasta ppgee_out/credenciamento/: - docentes0.csv contém os docentes do programa, ordenados pelo indicador PPQ, utilizado no credenciamento docente do PPGEE, com todos os docentes candidatos ao credenciamento. docentes1.csv contém os docentes do programa, excluídos os de menor PPQ, também ordenados pelo indicador PPQ. Os próximos arquivos são resultado das iterações subsequentes que continuam a eliminar os docentes de menor PPQ até que, na última iteração, todos os docentes presentes tenham PPQ maior ou igual ao ppq_minimo, que é igual a 2.
-- Também na pasta ppgee_out/credenciamento/ estão presentes os arquivos artigosi.csv, com i variando de 0 até o índice da última iteração do algoritmo de credenciamento do PPGEE. Nesses arquivos estão incluídos, entre outros dados de cada artigo, as classificações Qualis dos periódicos onde foram publicados e o número de docentes candidatos ao credenciamento que participaram daquela publicação.
+- Também na pasta ppgee_out/credenciamento/ estão presentes os arquivos artigosi.csv e patentesi.csv, com i variando de 0 até o índice da última iteração do algoritmo de credenciamento do PPGEE. Nesses arquivos estão incluídos, para os artigos usados na classificação dos docentes, entre outros dados, as classificações Qualis dos periódicos onde foram publicados e o número de docentes candidatos ao credenciamento que participaram daquela publicação. Para as patentes, entre outros dados, o ano e data de concessão das patentes, título e autores das patentes, e o número de docentes candidatos ao credenciamento que são autores daquela patente. 
 
 ## Observações:
 
@@ -147,7 +147,6 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados, que 
 
 - Incluir a identificação de autores que sejam alunos de graduação. Isso não parece complicado, basta usar a mesma lógica de identificação de discentes ou de egressos. No caso do PPGEE-UFMG a maior dificuldade parece estar na obtenção dos dados dos alunos da graduação;
 - Gerar os indicadores utilizados pela Comissão de Área das Engenharias IV;
-- Incluir o registro de patentes no algoritmo utilizado no PPGEE-UFMG para o credenciamento/recredenciamento de docentes. Esses dados não são ainda extraídos pelo lucyLattes, por isso é necessário primeiro criar a função para essa extração. 
 - Incluir ferramentas para a detecção de anomalias nos dados do PPGEE-UFMG.
 
 ## Autores:
@@ -318,3 +317,19 @@ Baseado nos trabalhos de:
         </TRABALHOS-EM-EVENTOS>
     </PRODUCAO-BIBLIOGRAFICA>
 ```
+
+- patentes
+
+```
+<CURRICULO-VITAE
+    <PRODUCAO-TECNICA>
+        <PATENTE>
+            <DADOS-BASICOS-DA-PATENTE />
+            <DETALHAMENTO-DA-PATENTE>
+                <REGISTRO-OU-PATENTE />
+             </DETALHAMENTO-DA-PATENTE>    
+            <AUTORES />
+        </PATENTE>
+    </PRODUCAO-TECNICACA>
+    ```
+
