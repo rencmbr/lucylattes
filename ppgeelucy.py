@@ -7,6 +7,7 @@ import time
 from ppgee_resources.authorsclassification import authors_classification
 from ppgee_resources.ppgee_read_set_config import PPGEEconfigSetup
 from ppgee_resources.credenciamentoppgee import credenciamento_ppgee
+import ppgee_resources.getpatents as ppgeepat
 
 
 def run_ppgeeLucy():
@@ -38,6 +39,7 @@ def run_ppgeeLucy():
         resources.getresearchextproj(zipname, minidomdoc)
         resources.getworksevents(zipname, minidomdoc)
         resources.getpapers(zipname, minidomdoc, qf)
+        ppgeepat.getpatents(zipname,minidomdoc)
         resources.getbooks(zipname, minidomdoc)
         resources.getchapters(zipname, minidomdoc)
         resources.getadv(zipname, minidomdoc)
@@ -47,9 +49,11 @@ def run_ppgeeLucy():
         resources.getproductsppect(zipname, minidomdoc)
         resources.getproductsppeadv(zipname, minidomdoc)
 
+
     resources.tidydata_ppe()
     resources.tidydata_worksevents()
     resources.tidydata_papers()
+    ppgeepat.tidydata_patents()
     resources.tidydata_books()
     resources.tidydata_chapters()
     resources.tidydata_advising()
