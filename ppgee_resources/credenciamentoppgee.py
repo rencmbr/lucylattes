@@ -222,7 +222,7 @@ def credenciamento_ppgee():
         df_docentes.to_csv(filedocentes)
         patentes_na_faixa_de_anos.sort_values(by=["FULL_NAME", "YEAR"], inplace=True)
         filepatentes = dir_base + 'patentes'+str(iter) + '.csv'
-        usecols = ['FULL_NAME','TITLE','YEAR','DEP_DAY','CON_DAY','NUM_DOCENTES','AUTHOR']
+        usecols = ['FULL_NAME','TITLE','COUNTRY','YEAR','DEP_DAY','CON_DAY','NUM_DOCENTES','AUTHOR']
         patentes_na_faixa_de_anos.to_csv(filepatentes, columns=usecols)
 
         # Busca os IDs dos docentes de menor PPQ para serem removidos da proxima iteração
