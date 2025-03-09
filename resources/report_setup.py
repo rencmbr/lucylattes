@@ -21,7 +21,7 @@ def report_setup_json():
     for production in lsfiles_toreport:
         try:
             df = pd.read_csv(dicreport_setup[production]['pathfilename'],
-                             header=0, dtype='str')
+                             header=0, dtype='str', encoding='ISO-8859-1')
         except (OSError, IOError):
             print('------------------------------------------------------------\n' +
                   'ATTENTION \n' +

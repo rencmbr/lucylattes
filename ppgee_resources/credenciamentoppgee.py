@@ -24,7 +24,7 @@ def get_artigos_faixa_anos_com_duplicados(id_docentes_a_remover):
     # artigos publicados por mais de um docente aparecerão em duplicata
     #=========================================================
     df=pd.read_csv('./csv_producao/papers_all.csv', 
-                        header=0, dtype=str)
+                        header=0, dtype=str, encoding='ISO-8859-1')
     
     # Remove os artigos dos docentes na lista de ids a remover
     df = df.drop(df[df['ID'].isin(id_docentes_a_remover)].index)
@@ -116,15 +116,21 @@ def conta_docentes_publicacao(ARTIGO_TABELA_AUTORES,docente_tabela):
 def compute_ppq_artigos(artigos_na_faixa_de_anos,df_docentes):
     ppq = []
     qualis_for_ppq = ['A1','A2','A3','A4']
+    jcr_for_ppq = 1.5
     for id in df_docentes['ID'].to_list():
         ppq_docente = 0
         resultado = list(artigos_na_faixa_de_anos["ID"] == id) 
         artigos_do_docente = artigos_na_faixa_de_anos.loc[resultado]
         num_docentes_artigo = artigos_na_faixa_de_anos["NUM_DOCENTES"].loc[resultado].to_list()
+        jcr_artigo = artigos_na_faixa_de_anos["JCR"].loc[resultado].to_list()
         idx=0
         for qualis in artigos_do_docente['QUALIS'].to_list():
             if qualis in qualis_for_ppq:
                 ppq_docente=ppq_docente + 1./num_docentes_artigo[idx]
+            elif qualis == 'XX':
+                jcr = float(jcr_artigo[idx])
+                if jcr >= jcr_for_ppq:
+                    ppq_docente = ppq_docente + 1./num_docentes_artigo[idx]    
             idx = idx+1
         ppq.append(ppq_docente)
     return ppq
@@ -142,7 +148,7 @@ def compute_ppq_patentes(patentes_na_faixa_de_anos,df_docentes):
     return ppq
 
 
-def remove_docentes_inferior(df_docentes,id_docentes_remover, ppq_inferior):
+def remove_docentes_inferior(df_docentes,id_docentes_remover, ppq_inferior,ja_removidos):
     # Remove os docentes que possuirem ppq <= ppq_inferior
     #
     df_docentes.reset_index(inplace=True, drop=True)
@@ -150,10 +156,11 @@ def remove_docentes_inferior(df_docentes,id_docentes_remover, ppq_inferior):
     a_remover = df_docentes.loc[remover]
     print("Docentes a remover com ppq_inferior ou igual a ", ppq_inferior)
     print(a_remover)
+    remov =pd.concat([a_remover, ja_removidos])
     list_ids = a_remover['ID'].to_list()
     for idx in range(len(list_ids)):
         id_docentes_remover.append(list_ids[idx])
-    return id_docentes_remover    
+    return id_docentes_remover, remov    
 
  
 def credenciamento_ppgee():
@@ -171,7 +178,7 @@ def credenciamento_ppgee():
     dir_base = 'ppgee_out/credenciamento/'
 
     # Remove csv files no diretorio credenciamento.
-    fileToRemove = glob.glob(dir_base + '*.csv')
+    fileToRemove = glob.glob(dir_base + '*.xlsx')
     for ff in fileToRemove:
         try:
             os.remove(ff)            
@@ -180,7 +187,8 @@ def credenciamento_ppgee():
 
     # Lista com os identificadores Lattes dos docentes a remover nas iterações
     # de cômputo do ppq, até se atingir todos os ppqs maiores que o limiar (limiar=2) 
-    id_docentes_remover = []      
+    id_docentes_remover = [] 
+    ja_removidos =  pd.DataFrame()    
 
     while ppq_inferior < ppq_limite :
         # Lê a tabela dos docentes e os artigos da faixa de anos
@@ -212,22 +220,26 @@ def credenciamento_ppgee():
         df_docentes["PPQ_ARTIGOS"] = ppq_artigos
         df_docentes["PPQ_PATENTES"] = ppq_patentes
 
-        # Armazena os resultados de cada iteração nos .csv de saída
+        # Armazena os resultados de cada iteração nos .xlsx de saída
         artigos_na_faixa_de_anos.sort_values(by=["FULL_NAME", "YEAR", "QUALIS"], inplace=True)
-        fileartigos = dir_base + 'artigos'+str(iter) + '.csv'
+        fileartigos = dir_base + 'artigos'+str(iter) + '.xlsx'
         usecols = ['FULL_NAME', 'TITLE','YEAR','DOI', 'JOURNAL', 'ISSN', 'QUALIS', 'JCR', 'NUM_DOCENTES','AUTHOR' ]
-        artigos_na_faixa_de_anos.to_csv(fileartigos, columns=usecols)
+        artigos_na_faixa_de_anos.to_excel(fileartigos, columns=usecols)
         df_docentes.sort_values(by="PPQ", inplace=True, ascending=False)
-        filedocentes = dir_base + 'docentes'+str(iter) + '.csv'
-        df_docentes.to_csv(filedocentes)
+        filedocentes = dir_base + 'docentes'+str(iter) + '.xlsx'
+        df_docentes.to_excel(filedocentes)
         patentes_na_faixa_de_anos.sort_values(by=["FULL_NAME", "YEAR"], inplace=True)
-        filepatentes = dir_base + 'patentes'+str(iter) + '.csv'
+        filepatentes = dir_base + 'patentes'+str(iter) + '.xlsx'
         usecols = ['FULL_NAME','TITLE','COUNTRY','YEAR','DEP_DAY','CON_DAY','NUM_DOCENTES','AUTHOR']
-        patentes_na_faixa_de_anos.to_csv(filepatentes, columns=usecols)
+        patentes_na_faixa_de_anos.to_excel(filepatentes, columns=usecols)
 
         # Busca os IDs dos docentes de menor PPQ para serem removidos da proxima iteração
         ppq_inferior = df_docentes['PPQ'].min()
         if ppq_inferior >= ppq_limite:
             break
-        id_docentes_remover = remove_docentes_inferior(df_docentes,id_docentes_remover, ppq_inferior)
+        id_docentes_remover, ja_removidos = remove_docentes_inferior(df_docentes,id_docentes_remover,
+                                                                      ppq_inferior, ja_removidos)
         iter=iter+1
+    ja_removidos.sort_values(by="PPQ", inplace=True, ascending=False)
+    fileremovidos = dir_base + 'docentes_colaboradores' + '.xlsx'
+    ja_removidos.to_excel(fileremovidos)

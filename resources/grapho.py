@@ -15,7 +15,7 @@ def grapho_paper():
     dffullname = pd.read_csv('./csv_producao/fullname_all.csv',
                              header=0, dtype='str')
     dfpaper = pd.read_csv('./csv_producao/papers_all.csv',
-                          header=0, dtype='str')
+                          header=0, dtype='str', encoding='ISO-8859-1')
     # dfpaper_uniq = pd.read_csv('./csv_producao/papers_uniq.csv',
     #                            header=0, dtype='str')
     # create a df for idlist with researchres identification

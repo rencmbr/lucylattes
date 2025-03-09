@@ -121,7 +121,7 @@ def getpapers(zipname, minidomdoc, qf):
                                       })
             pathfilename = str('./csv_producao/' +
                                id_lattes + '_papers.csv')
-            df_papers.to_csv(pathfilename, index=False)
+            df_papers.to_csv(pathfilename, index=False, encoding='ISO-8859-1')
             print('The file ', pathfilename, ' has been writed.')
         else:
             print('The id Lattes ', id_lattes, ' has NO ARTIGOS-PUBLICADOS.')

@@ -194,7 +194,7 @@ def tabela_artigos(year) :
     # Le os dados que serão usados (todos os artigos, já removidos os duplicados)
     usecols = ["TITLE","YEAR","DOI", "JOURNAL","ISSN","AUTHOR","QUALIS"]
     df = pd.read_csv('./csv_producao/papers_uniq.csv', usecols=usecols,
-                        header=0, dtype=str, keep_default_na=False)
+                        header=0, dtype=str, keep_default_na=False, encoding='ISO-8859-1')
 
     # Filtra os artigos do ano específico 
 
@@ -222,7 +222,7 @@ def tabela_eventos(year):
     # Le os dados que serão usados (todas as produções, já removidas as duplicatas)
     usecols = ["TITLE","YEAR","AUTHOR"]
     df = pd.read_csv('./csv_producao/worksevents_uniq.csv', usecols=usecols,
-                        header=0, dtype=str, keep_default_na=False)
+                        header=0, dtype=str, keep_default_na=False, encoding='ISO-8859-1')
     # Filtra os artigos do ano específico 
  
     resultado = list(df["YEAR"] == year) 
@@ -375,16 +375,16 @@ def authors_classification(year):
     artigos_com_autores_classificados = insere_classificacao_autores(artigos,TIPO_AUTOR_ARTIGO)
     eventos_com_autores_classificados = insere_classificacao_autores(eventos,TIPO_AUTOR_EVENTO)
 
-    # Gera os artigos (.csv) com os dados dos artigos e classificação dos autores
+    # Gera os artigos (.xlsx) com os dados dos artigos e classificação dos autores
 
     out_path = 'ppgee_out/classificaautores/'
     
     columns = ["TITLE","YEAR","DOI", "JOURNAL","ISSN","QUALIS","CLASSIFIED_AUTHORS"]
-    file_saida_artigos = out_path + 'artigosclassificados-PPGEE-' + year + '.csv'
-    artigos_com_autores_classificados.to_csv(file_saida_artigos, columns=columns)
+    file_saida_artigos = out_path + 'artigosclassificados-PPGEE-' + year + '.xlsx'
+    artigos_com_autores_classificados.to_excel(file_saida_artigos, columns=columns)
     print('- O arquivo com a classificação dos autores de artigos foi gerado em ', file_saida_artigos)
 
     columns = ["TITLE","YEAR","CLASSIFIED_AUTHORS"]
-    file_saida_eventos = out_path + 'eventosclassificados-PPGEE-' + year + '.csv'
-    eventos_com_autores_classificados.to_csv(file_saida_eventos, columns=columns)
+    file_saida_eventos = out_path + 'eventosclassificados-PPGEE-' + year + '.xlsx'
+    eventos_com_autores_classificados.to_excel(file_saida_eventos, columns=columns)
     print('- O arquivo com a classificação dos autores de publicações em eventos foi gerado em ', file_saida_eventos)

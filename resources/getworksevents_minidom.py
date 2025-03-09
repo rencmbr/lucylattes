@@ -129,7 +129,7 @@ def getworksevents(zipname, minidomdoc):
                                             })
                 pathfilename = str('./csv_producao/' +
                                    id_lattes + '_worksevents.csv')
-                df_workevnt.to_csv(pathfilename, index=False)
+                df_workevnt.to_csv(pathfilename, index=False, encoding='ISO-8859-1')
                 print('The file ', pathfilename, ' has been writed.')
         except:
             print('The id Lattes ', id_lattes, ' has NO TRABALHOS-EM-EVENTOS')

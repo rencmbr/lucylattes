@@ -2,6 +2,8 @@
 
 import pandas as pd
 
+cod = ""
+
 
 def getencoding_minidom(zipname, minidomdoc):
     """Get encoding and version from minidom."""

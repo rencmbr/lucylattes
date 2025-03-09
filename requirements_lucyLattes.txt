@@ -2,7 +2,8 @@ datetime
 matplotlib 
 networkx   
 nltk       
-numpy      
+numpy 
+openpyxl
 pandas     
 scipy      
 scikit-learn

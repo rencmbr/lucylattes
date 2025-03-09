@@ -108,7 +108,8 @@ def tidydata_worksevents():
     else:
         df_workevnt = pd.DataFrame()
         for idx in range(len(lscsv_workevnt)):
-            df = pd.read_csv(lscsv_workevnt[idx], header=0, dtype='str')
+            df = pd.read_csv(lscsv_workevnt[idx], header=0, dtype='str', 
+                             encoding='ISO-8859-1')
             # df_workevnt = df_workevnt.append(df, ignore_index=False)
             df_workevnt = concat_df(df_workevnt, df)
         df_workevnt.reset_index(inplace=True, drop=True)
@@ -134,11 +135,11 @@ def tidydata_worksevents():
         df_workevnt.reset_index(inplace=True, drop=True)
         # write files
         pathfilename = str('./csv_producao/worksevents_all.csv')
-        df_workevnt.to_csv(pathfilename, index=False)
+        df_workevnt.to_csv(pathfilename, index=False, encoding='ISO-8859-1')
         print(pathfilename, ' writed with ',
               len(df_workevnt['TITLE']), ' worksevents')
         pathfilename = str('./csv_producao/worksevents_uniq.csv')
-        df_workevnt_uniq.to_csv(pathfilename, index=False)
+        df_workevnt_uniq.to_csv(pathfilename, index=False, encoding='ISO-8859-1')
         print(pathfilename, ' writed with',
               len(df_workevnt_uniq['TITLE']), ' worksevents')
 
@@ -152,7 +153,7 @@ def tidydata_papers():
     else:
         df_paper = pd.DataFrame()
         for idx in range(len(lscsv_paper)):
-            df = pd.read_csv(lscsv_paper[idx], header=0, dtype='str')
+            df = pd.read_csv(lscsv_paper[idx], header=0, dtype='str', encoding='ISO-8859-1')
             # df_paper = df_paper.append(df, ignore_index=False)
             df_paper = concat_df(df_paper, df)
         df_paper.reset_index(inplace=True, drop=True)
@@ -178,11 +179,11 @@ def tidydata_papers():
         df_paper.reset_index(inplace=True, drop=True)
         # write files
         pathfilename = './csv_producao/papers_all.csv'
-        df_paper.to_csv(pathfilename, index=False)
+        df_paper.to_csv(pathfilename, index=False, encoding='ISO-8859-1')
         print(pathfilename, ' writed with ',
               len(df_paper['TITLE']), ' papers')
         pathfilename = './csv_producao/papers_uniq.csv'
-        df_paper_uniq.to_csv(pathfilename, index=False)
+        df_paper_uniq.to_csv(pathfilename, index=False, encoding='ISO-8859-1')
         print(pathfilename, ' writed with',
               len(df_paper_uniq['TITLE']), ' papers')
 
