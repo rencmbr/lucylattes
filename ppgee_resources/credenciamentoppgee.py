@@ -17,7 +17,7 @@ def extrai_ano_data_string_sem_barras(data_str):
         else:
             return 0
 
-def get_artigos_faixa_anos_com_duplicados(id_docentes_a_remover):
+def get_artigos_faixa_anos_com_duplicados(id_docentes_a_remover,lsyear_limits):
     #=========================================================
     # Busca todos os artigos publicados na faixa de anos especificada
     # no arquivo de configuração de entrada (config_tk.txt)
@@ -29,8 +29,7 @@ def get_artigos_faixa_anos_com_duplicados(id_docentes_a_remover):
     # Remove os artigos dos docentes na lista de ids a remover
     df = df.drop(df[df['ID'].isin(id_docentes_a_remover)].index)
 
-    # Filtra os artigos dos anos da faixa (lida do arquivo config_tk.txt)
-    lsyear_limits = yearlimit_forfilter()
+    # Filtra os artigos dos anos da faixa 
     df['YEAR'] = [int(yy) for yy in df['YEAR'].to_list()]
     df = df[(df['YEAR'] >= lsyear_limits[0]) &
                 (df['YEAR'] <= lsyear_limits[1])]
@@ -49,7 +48,7 @@ def get_artigos_faixa_anos_com_duplicados(id_docentes_a_remover):
 
     return df
 
-def get_patentes_faixa_anos_com_duplicados(id_docentes_a_remover):
+def get_patentes_faixa_anos_com_duplicados(id_docentes_a_remover,lsyear_limits):
     #=========================================================
     # Busca todas as patentes concedidas na faixa de anos especificada
     # no arquivo de configuração de entrada (config_tk.txt)
@@ -61,8 +60,7 @@ def get_patentes_faixa_anos_com_duplicados(id_docentes_a_remover):
     # Remove as patentes dos docentes na lista de ids a remover
     df = df.drop(df[df['ID'].isin(id_docentes_a_remover)].index)
 
-    # Filtra as patentes concedidas nos anos da faixa (lida do arquivo config_tk.txt)
-    lsyear_limits = yearlimit_forfilter()
+    # Filtra as patentes concedidas nos anos da faixa 
     df['YEAR'] = [extrai_ano_data_string_sem_barras(yy) for yy in df['CON_DAY'].to_list()]
     df = df[(df['YEAR'] >= lsyear_limits[0]) &
                 (df['YEAR'] <= lsyear_limits[1])]
@@ -80,6 +78,38 @@ def get_patentes_faixa_anos_com_duplicados(id_docentes_a_remover):
     df["AUTHOR"] = listaautores
 
     return df
+
+def get_livros_faixa_anos_com_duplicados(id_docentes_a_remover, lsyear_limits):
+    #=========================================================
+    # Busca todos os livros publicados na faixa de anos especificada
+    # no arquivo de configuração de entrada (config_tk.txt)
+    # Livros com mais de um docente autor aparecerão em duplicata
+    #=========================================================
+    df=pd.read_csv('./csv_producao/books_all.csv', 
+                        header=0, dtype=str, keep_default_na=False)
+    
+    # Remove os livros dos docentes na lista de ids a remover
+    df = df.drop(df[df['ID'].isin(id_docentes_a_remover)].index)
+
+    # Filtra os livros publicados nos anos da faixa (lida do arquivo config_tk.txt)
+    df['YEAR'] = [int(yy) for yy in df['YEAR'].to_list()]
+    df = df[(df['YEAR'] >= lsyear_limits[0]) &
+                (df['YEAR'] <= lsyear_limits[1])]
+    df.reset_index(inplace=True, drop=True)
+
+    # Regulariza os nomes dos autores
+    df["AUTHOR"] = df["AUTHOR"].apply(ac.regulariza)
+    df["AUTHOR"] = df["AUTHOR"].apply(eval)
+
+    # Remove duplicados da lista de autores
+    listaautores = df['AUTHOR'].to_list()
+    for i in range(len(listaautores)):
+        autoresartigo = listaautores[i]
+        listaautores[i] = list(OrderedDict.fromkeys(autoresartigo))
+    df["AUTHOR"] = listaautores
+
+    return df
+
 
 def conta_docentes_publicacao(ARTIGO_TABELA_AUTORES,docente_tabela):
     # ====================================================
@@ -176,6 +206,7 @@ def credenciamento_ppgee():
     ppq_limite=2.
     iter = 0
     dir_base = 'ppgee_out/credenciamento/'
+    lsyear_limits = yearlimit_forfilter()
 
     # Remove csv files no diretorio credenciamento.
     fileToRemove = glob.glob(dir_base + '*.xlsx')
@@ -194,11 +225,11 @@ def credenciamento_ppgee():
         # Lê a tabela dos docentes e os artigos da faixa de anos
         # Elimina das tabelas os docentes cujos identificadores estão em id_docentes_remover
         docentes, df_docentes = ac.tabela_docentes_autores(id_docentes_remover)
-        artigos_na_faixa_de_anos = get_artigos_faixa_anos_com_duplicados(id_docentes_remover)
+        artigos_na_faixa_de_anos = get_artigos_faixa_anos_com_duplicados(id_docentes_remover,lsyear_limits)
 
         # Lê a tabela das patentes da faixa de anos
         # Elimina da tabela os docentes cujos identificadores estão em id_docentes_remover
-        patentes_na_faixa_de_anos = get_patentes_faixa_anos_com_duplicados(id_docentes_remover)
+        patentes_na_faixa_de_anos = get_patentes_faixa_anos_com_duplicados(id_docentes_remover,lsyear_limits)
                 
         # Regulariza os dados dos autores dos artigos e patentes para poder classifica-los
         ARTIGO_TABELA_AUTORES = ac.regulariza_autores(artigos_na_faixa_de_anos["AUTHOR"].to_list())

@@ -22,7 +22,8 @@ def regulariza(texto):
     texto = texto.replace('Ç','C')
     texto = texto.replace('Ñ','N')
     texto = texto.replace('.','. ')
-    return texto
+    texto = re.sub(r'[0-9()/]', '', texto)
+    return texto.rstrip()
 
 def extrai_ano_string(data_str):
     return datetime.strptime(data_str, '%d/%m/%y').year
@@ -71,7 +72,7 @@ def tabela_docentes_autores(id_docentes_a_remover):
     # ====================================================
     # Busca os dados dos nomes lidos do currículo Lattes
     #
-    usecols = ["FULL_NAME", "ID"]
+    usecols = ["FULL_NAME", "ID", "UPDATE"]
     df = pd.read_csv('./csv_producao/fullname_all.csv', usecols=usecols,
                         header=0, dtype=str, keep_default_na=False)
     

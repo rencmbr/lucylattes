@@ -7,6 +7,7 @@ import time
 from ppgee_resources.authorsclassification import authors_classification
 from ppgee_resources.ppgee_read_set_config import PPGEEconfigSetup
 from ppgee_resources.credenciamentoppgee import credenciamento_ppgee
+from ppgee_resources.bolsasppgee import bolsas_ppgee
 import ppgee_resources.getpatents as ppgeepat
 
 
@@ -68,6 +69,8 @@ def run_ppgeeLucy():
     turn_authors_classification = configsPPGEE.run_authors_classification()
     authors_classification_year = configsPPGEE.classification_year()
     turn_credenciamento = configsPPGEE.run_credenciamento_ppgee()
+    turn_confere_dados = configsPPGEE.run_confere_dados_ppgee()
+    turn_bolsas = configsPPGEE.run_bolsas_ppgee()
     
     if turn_hwebsci_index == 1:
         resources.getindex_hwebsci()
@@ -91,7 +94,11 @@ def run_ppgeeLucy():
         authors_classification(authors_classification_year)
 
     if turn_credenciamento == 1:
-        credenciamento_ppgee()    
+        credenciamento_ppgee()  
+
+    if turn_bolsas == 1:
+        bolsas_classification_year = authors_classification_year
+        bolsas_ppgee(bolsas_classification_year)      
   
     if turn_rm_csvfiles == 1:
         resources.remove_csv_producao()
