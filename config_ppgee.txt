@@ -2,6 +2,6 @@ run_html_report: 1
 run_authors_classification: 1
 authors_classification_year: 2024
 run_credenciamento: 1
-run_confere_dados: 1
+run_confere_dados: 0
 run_bolsas: 1
 
