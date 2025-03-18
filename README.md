@@ -7,12 +7,13 @@ O PPGEE-Lucy é um fork do `lucyLattes`[![DOI](https://zenodo.org/badge/DOI/10.5
 - Classificação automática dos autores dos artigos gerados pela comunidade do PPGEE-UFMG em um determinado ano. Isto é importante para o preenchimento do relatório Sucupira, especialmente devido à necessidade de identificar se determinado autor é discente ou egresso do programa (PRONTO!);
 - Geração automática de indicadores de produtividade, compatíveis com os utilizados pela área de Engenharias IV da CAPES, com a finalidade de auxílio na avaliação do desempenho do programa;
 - Auxílio no processo de credenciamento/recredenciamento dos docentes do PPGEE-UFMG, gerando os indicadores utilizados (PRONTO!);
+- Auxílio no processo de alocação de bolsas do PPGEE-UFMG, gerando os indicadores utilizados (PRONTO!)
 - Detecção de anomalias nos dados do PPGEE-UFMG
 
 ## O que faz:
 
 - Extração, compilação, e organização dos dados dos currículos da plataforma *Lattes* em planilhas, e geração de um relátório simplificado (funcionalidades herdadas do `lucyLattes`).
-- Geração de planilhas com os dados organizados para auxiliar na avaliação do programa, credenciamento de docentes e preenchimento correto do relatório Sucupira.
+- Geração de planilhas com os dados organizados para auxiliar na avaliação do programa, credenciamento de docentes, alocação de bolsas e preenchimento correto do relatório Sucupira.
 
 ## Requisitos:
   
@@ -112,13 +113,17 @@ Onde:
 - run_html_report: 1
 - run_authors_classification: 1
 - authors_classification_year: 2023
-- run_credenciamento:1
+- run_credenciamento: 1
+- run_confere_dados: 0
+- run_bolsas: 1
 
 Onde:
 - run_html_report indica, caso igual a 1, que o relatório html original do script lucylattes deve ser gerado;
 - run_authors_classification indica, caso igual a 1, que a classificação dos autores de artigos (se docentes, discentes, pós-docs ou egressos) deve ser gerada;
 - authors_classification_year é o ano que deve ser usado para a classificação dos autores de artigos. Isto é necessário porque classificação dos autores depende do ano (um discente neste ano pode se transformar em um egresso no ano seguinte, por exemplo).
 - run_credenciamento indica, caso igual a 1, que o algoritmo de credenciamento de docentes do PPGEE deve ser executado. Nesse caso, a faixa de anos utilizada para o credenciamento será buscada no arquivo config_tk.txt (ano inicial e ano final). Por exemplo, ao executar o algoritmo de credenciamento no início de 2024, a faixa de anos deve ser dos quatro anos anteriores, isto é, ano inicial:2020 e ano final:2023. Para rodar o algoritmo no meio de 2024, a faixa de anos deve ser dos tres anos anteriores mais o ano atual, isto é, ano inicial:2021 e ano final:2024.
+- run_confere_dados indica, caso igual a 1, que o processo de credenciamento não será executado normalmente (isto é, com as informações extraídas dos arquivos Lattes), mas a partir de um arquivo com a produção do período que sofreu verificação manual pelos docentes, para identificar e corrigir inconsistências na obtenção dos dados.
+- run_bolsas indica, caso igual a 1, que o algoritmo de pontuação dos docentes para efeito de alocação de bolsas (cálculo dos delta PAD), será executado.
 
 ## Arquivos de dados:
 
@@ -131,6 +136,7 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados, loca
 - Egressos-PPGEE-ano.csv: arquivo csv com os egressos do PPGEE: por exemplo Egressos-PPGEE-2023.csv, que contém os egressos do ano de 2023 e, pelo menos, dos cinco anos anteriores (2018 a 2022). Na realidade, podem ser incluidos todos os egressos, desde o início de funcionamento do programa. Formato do arquivo: arquivo de texto, com o nome do egresso, Nível (se Mestrado ou Doutorado), nome do orientador e data de defesa (formato dd/mm/yy), separados por virgula. Cabeçalhos das colunas: "FULL_NAME", "NIVEL", "ORIENTADOR" e "DEFESA". Caso um egresso tenha mais de uma forma como o nome aparece nas publicacoes, basta incluir na lista as varias formas, uma em cada linha.
 - Docentes-PPGEE-NomesAlternativos.csv: Arquivo csv com nomes alternativos para os docentes do PPGEE. Os nomes "oficiais", completos, dos docentes são gerados a partir da leitura dos currículos Lattes presentes no diretório xml_zip. Porém, existem situações (como, por exemplo, o caso em que o docente tem o sobrenome "FILHO", ou então "JUNIOR") em que versões alternativas dos nomes devem ser utilizadas. Nesse caso, basta incluir as versões (uma em cada linha) nesse arquivo. Cabeçalho da coluna: "NAME".
 - Posdoc-PPGEE-ano.csv: arquivo csv com os pos-docs do PPGEE no ano específico - por exemplo Posdoc-PPGEE-2023.csv para o ano de 2023. Formato do arquivo: arquivo de texto, com os nomes do posdoc, nível (P), número de matrícula, nome do orientador e data de defesa do doutorado,  separados por virgula e cada par de posdoc/orientador separado do seguinte por fim-de-linha. Cabeçalhos das colunas: "FULL_NAME", "NIVEL", "MATRICULA", "ORIENTADOR" e "DEFESA".  Caso um posdoc tenha mais de uma forma como o nome aparece nas publicacoes, basta incluir na lista as varias formas.
+- Defesas_PPGEE-ano.csv: arquivo csv com as defesas que ocorreram no PPGEE no ano específico - por exemplo, Defesas-PPGEE-2024.csv para o ano de 2024. Formato do arquivo: arquivo de texto com o nome do aluno, Nivel (Doutorado(D ou P, caso o doutor continue no programa como pos-doc) ou Mestrado (M), número de matricula, data de defesa, orientador e mais 3 campos com os nomes de possiveis coorientadores.(no caso dos coorientadores, caso o trabalho não possua, o campo é preenchido com o texto FALSO). A última coluna indica, caso igual a 'S' que a versão final do trabalho foi entregue e, caso igual a 'N' que ela não foi entregue. Cabeçalho das colunas: "FULL_NAME", "NIVEL", "MATRICULA", "DEFESA", "ORIENTADOR", "COORIENTADOR 1", "COORIENTADOR 2", "COORIENTADOR 3" e "TEXTO FINAL"
 
 ## Arquivos de saida:
 
@@ -139,7 +145,8 @@ Além desses arquivos, o PPGEE-Lucy utiliza os seguintes arquivos de dados, loca
 - Os arquivos artigosclassificados-PPGEE-ano.xlsx e eventosclassificados-PPGEE-ano.xlsx, no diretório ppgee_out/classificaautores/, contêm a classificação (se docentes, discentes, egressos ou posdoc) dos autores dos artigos em periódicos ou em eventos publicados no ano específico.
 - Os arquivos docentesi.xlsx, com i variando de 0 até o índice da última iteração do algoritmo de credenciamento do PPGEE, estão localizados na pasta ppgee_out/credenciamento/: - docentes0.xlsx contém os docentes do programa, ordenados pelo indicador PPQ, utilizado no credenciamento docente do PPGEE, com todos os docentes candidatos ao credenciamento. docentes1.xlsx contém os docentes do programa, excluídos os de menor PPQ, também ordenados pelo indicador PPQ. Os próximos arquivos são resultado das iterações subsequentes que continuam a eliminar os docentes de menor PPQ até que, na última iteração, todos os docentes presentes tenham PPQ maior ou igual ao ppq_minimo, que é igual a 2.
 - Na mesma pasta está o arquivo docentes_colaboradores.xlsx, com a listagem dos docentes que não atingiram o ppq_minimo para credenciamento, ordenados do maior para o menor ppq. Esta listagem pode ser utilizada para definir os docentes que participarão do programa como colaboradores.
-- Também na pasta ppgee_out/credenciamento/ estão presentes os arquivos artigosi.xlsx e patentesi.xlsx, com i variando de 0 até o índice da última iteração do algoritmo de credenciamento do PPGEE. Nesses arquivos estão incluídos, para os artigos usados na classificação dos docentes, entre outros dados, as classificações Qualis dos periódicos onde foram publicados e o número de docentes candidatos ao credenciamento que participaram daquela publicação. Para as patentes, entre outros dados, o ano e data de concessão das patentes, título e autores das patentes, e o número de docentes candidatos ao credenciamento que são autores daquela patente. 
+- Também na pasta ppgee_out/credenciamento/ estão presentes os arquivos artigosi.xlsx e patentesi.xlsx, com i variando de 0 até o índice da última iteração do algoritmo de credenciamento do PPGEE. Nesses arquivos estão incluídos, para os artigos usados na classificação dos docentes, entre outros dados, as classificações Qualis dos periódicos onde foram publicados e o número de docentes candidatos ao credenciamento que participaram daquela publicação. Para as patentes, entre outros dados, o ano e data de concessão das patentes, título e autores das patentes, e o número de docentes candidatos ao credenciamento que são autores daquela patente.
+- O arquivo PAD_docentesano.xlsx no diretório ppgee_out/pad_bolsas/ contém os docentes do programa com os dados de sua pontuação para alocação de bolsas no ano, incluindo a pontuação referente às defesas de seus alunos, artigos publicados em periódicos, concessão de patentes e livros, além da pontuação total (delta PAD) obtida no ano. No mesmo diretório estão os arquivos artigosanos.xlsx, livrosano.xlsx e patentesano.xlsx que consolidam os dados que foram utilizados para o cômputo das pontuações.
 
 ## Observações:
 
